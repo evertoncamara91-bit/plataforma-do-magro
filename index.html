@@ -151,11 +151,23 @@ input:focus,textarea:focus,select:focus{outline:2px solid var(--sel);outline-off
 <button data-p="emblemas" aria-pressed="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="5" r="2"/><path d="M12 7v14M8 11h8M5 14a7 7 0 0 0 14 0"/></svg>Emblemas</button>
 </nav>
 <aside class="panel" id="panel" hidden>
-<section data-panel="nomes"><h2>Nomes <button class="x" data-close aria-label="Fechar">×</button></h2>
+<section data-panel="nomes"><h2><span id="nomesTitle">Nomes</span> <button class="x" data-close aria-label="Fechar">×</button></h2>
+<div id="envBox" hidden>
+<div class="fld"><label for="envType">Tipo de etiqueta</label><select id="envType"><option value="cargo">Destinatário – trabalho (posto, nome e cargo)</option><option value="end">Destinatário – residência (nome e endereço)</option><option value="rem">Remetente (mesmo texto em todas)</option><option value="nome">Só o nome (igual ao prisma)</option></select></div>
+<div id="envDest"><div class="fld" style="margin-top:10px"><label for="envTrat">Tratamento</label><select id="envTrat"><option>Ao Senhor</option><option>À Senhora</option><option>A Sua Excelência o Senhor</option><option>A Sua Excelência a Senhora</option><option>Ao Excelentíssimo Senhor</option><option>Ao Ilustríssimo Senhor</option><option value="">Sem tratamento</option></select></div>
+<div class="fld" style="margin-top:10px"><label for="envText">Destinatários</label><textarea id="envText" spellcheck="false" style="min-height:220px"></textarea></div>
+<p class="hint" id="envHint"></p>
+<div class="row"><button class="lnk" id="envFromList">Puxar da lista de Nomes</button><button class="lnk" id="envClear" style="color:var(--mute)">Limpar</button></div>
+<ul class="ppl" id="envPpl"></ul></div>
+<div id="envRem"><div class="fld" style="margin-top:10px"><label for="remText">Texto do remetente</label><textarea id="remText" spellcheck="false" style="min-height:140px" placeholder="Remetente:&#10;Gabinete do Comandante&#10;Praça Barão de Ladário, s/nº – Centro&#10;Rio de Janeiro/RJ – CEP 20091-000"></textarea></div>
+<div class="fld" style="margin-top:10px"><label for="remCopies">Quantas etiquetas</label><input type="number" id="remCopies" min="1" max="500"></div></div>
+<label class="tg" style="margin-top:6px" id="envLogoRow">Emblema na etiqueta<input type="checkbox" id="envLogo"></label>
+</div>
+<div id="nameBox">
 <textarea id="list" spellcheck="false" placeholder="VA Barroso&#10;Contra-Almirante (IM) Fulano&#10;Embaixador; João Silva"></textarea>
 <p class="hint">Um por linha, com o posto na frente. Termine com x2 para duas cópias. A mesma lista vale para as três abas.</p>
 <div class="row"><button class="lnk" id="sample">Ver exemplo</button><button class="lnk" id="clear" style="color:var(--mute)">Limpar</button></div>
-<ul class="ppl" id="ppl"></ul></section>
+<ul class="ppl" id="ppl"></ul></div></section>
 <section data-panel="menu"><h2>Pratos <button class="x" data-close aria-label="Fechar">×</button></h2>
 <div class="fld"><label for="mTitle">Título</label><input type="text" id="mTitle"></div>
 <div class="fld" style="margin-top:10px"><label for="mFront">Pratos (linha com # vira título de seção)</label><textarea id="mFront" spellcheck="false"></textarea></div>
@@ -665,7 +677,7 @@ D("faceW","Largura","cm",1.5,30,.05);D("faceH","Altura","cm",1,30,.05);D("gapX",
 D("pad","Margem lateral","cm",0,4,.05);D("frame","Recuo da moldura","cm",0,2,.01);D("gap1","Posto → nome","cm",0,3,.01);D("gap2","Nome → filete","cm",0,3,.01);D("gap3","Filete → evento","cm",0,3,.01);
 for(const b of["posto","nome","evt","rule","logoL","logoR","text","title","sub","logos","pessoa","menu"]){D(b+"DX","Horizontal","cm",-15,15,.01);D(b+"DY","Vertical","cm",-15,15,.01)}
 for(const b of["posto","nome","evt","logoL","logoR","title","sub","pessoa","logos"]){D(b+"R","Girar","°",-180,180,1);D(b+"O","Transparência","%",0,100,1)}
-D("menuO","Transparência","%",0,100,1);D("ruleO","Transparência","%",0,100,1);
+D("menuO","Transparência","%",0,100,1);D("envO","Transparência","%",0,100,1);D("envPt","Tamanho","pt",3,40,.5);D("envLH","Entrelinhas","×",.8,2.5,.02);D("envDX","Horizontal","cm",-15,15,.01);D("envDY","Vertical","cm",-15,15,.01);D("ruleO","Transparência","%",0,100,1);
 D("postoPt","Tamanho","pt",3,60,.5);D("nomePt","Tamanho","pt",3,90,.5);D("nomeLH","Entrelinhas","×",.7,2.5,.02);D("nomeLS","Espaço entre letras","%",-10,60,.5);D("evtPt","Tamanho","pt",3,40,.5);D("ruleW","Largura","cm",0,15,.05);
 D("logoLH","Tamanho","cm",.2,12,.05);D("logoRH","Tamanho","cm",.2,12,.05);
 D("flagW","Largura","cm",.3,20,.05);D("flagH","Altura","cm",.3,20,.05);D("flagOp","Intensidade","%",5,100,1);D("flagFade","Degradê","%",5,100,1);
@@ -678,19 +690,21 @@ const zero=ks=>Object.fromEntries(ks.map(k=>[k,0]));
 /* blocos: nome, tamanho (sz), giro (r), fonte (f), cor (c), espaçamentos (sp), transparência (o) */
 const BLK_PE={posto:{n:"Posto",sz:"postoPt",r:"postoR",f:"postoF",c:"postoC",o:"postoO"},nome:{n:"Nome",sz:"nomePt",r:"nomeR",f:"nomeF",c:"nomeC",o:"nomeO",sp:["nomeLS","nomeLH"]},evt:{n:"Evento",sz:"evtPt",r:"evtR",f:"evtF",c:"evtC",o:"evtO"},rule:{n:"Filete",sz:"ruleW",c:"ruleC",o:"ruleO"},logoL:{n:"Emblema 1",sz:"logoLH",r:"logoLR",o:"logoLO",img:"L"},logoR:{n:"Emblema 2",sz:"logoRH",r:"logoRR",o:"logoRO",img:"R"},flags:{n:"Bandeiras",flag:1},card:{n:"",sp:["pad","frame","gap1","gap2","gap3"]}};
 const BLK_M={logoL:{n:"Emblema 1",sz:"logoLH",r:"logoLR",o:"logoLO",img:"L"},logoR:{n:"Emblema 2",sz:"logoRH",r:"logoRR",o:"logoRO",img:"R"},title:{n:"Título",sz:"titlePt",r:"titleR",f:"titleF",c:"titleC",o:"titleO"},sub:{n:"Evento",sz:"subPt",r:"subR",f:"subF",c:"subC",o:"subO"},rule:{n:"Filete",sz:"ruleW",c:"ruleC",o:"ruleO"},pessoa:{n:"Autoridade",sz:"pNomePt",sz2:"pPostoPt",r:"pessoaR",f:"pessoaF",c:"pessoaC",o:"pessoaO"},menu:{n:"Pratos",sz:"itemPt",sz2:"secPt",f:"itemF",f2:"secF",c:"itemC",c2:"secC",o:"menuO",sp:["itemLH","secGap","secHeadGap","secLS"]},flags:{n:"Bandeiras",flag:1},card:{n:"",sp:["padX","padT","padB","frame","logoGap","gHead","gTitle","gRule","gPessoa","gMenu"]}};
+const BLK_ENV={env:{n:"Texto",sz:"envPt",f:"envF",c:"envC",o:"envO",sp:["envLH"],align:"envAlign"},logoL:{n:"Emblema",sz:"logoLH",r:"logoLR",o:"logoLO",img:"L"},flags:{n:"Bandeiras",flag:1},card:{n:"",sp:["pad","frame"]}};
 const BASE_PE={pad:.45,frame:.2,postoPt:13,nomePt:22.5,nomeLH:1.08,nomeLS:3,evtPt:8.5,ruleW:1.9,gap1:.13,gap2:.08,gap3:.07,logoLH:1.4,logoRH:2.3,flagW:3,flagH:2.2,flagOp:85,flagFade:75,postoF:"Cormorant",nomeF:"Cinzel",evtF:"CormorantI",postoC:"",nomeC:"",evtC:"",ruleC:"",postoO:100,nomeO:100,evtO:100,ruleO:100,logoLO:100,logoRO:100,...zero(["postoDX","postoDY","nomeDX","nomeDY","evtDX","evtDY","ruleDX","ruleDY","textDX","textDY","logoLDX","logoLDY","logoRDX","logoRDY","postoR","nomeR","evtR","logoLR","logoRR"])};
 const GEN={prismas:{label:"Prismas",one:"prisma",many:"prismas",tent:true,blocks:BLK_PE,per:[1,2,3,4,6,8],def:{faceW:8.65,faceH:4.43,gapX:.5,gapY:.4,minM:.5,...BASE_PE}},
- etiquetas:{label:"Etiquetas",one:"etiqueta",many:"etiquetas",tent:false,blocks:BLK_PE,def:{faceW:6.35,faceH:2.54,gapX:.26,gapY:0,minM:0,...BASE_PE}},
+ etiquetas:{label:"Etiquetas",one:"etiqueta",many:"etiquetas",tent:false,blocks:BLK_PE,def:{faceW:6.35,faceH:2.54,gapX:.26,gapY:0,minM:0,...BASE_PE,envPt:11,envLH:1.15,envF:"Cinzel",envC:"",envO:100,envDX:0,envDY:0,envAlign:"left"}},
  cardapio:{label:"Cardápio",one:"cardápio",many:"cardápios",tent:true,blocks:BLK_M,per:[1,2,4],def:{faceW:9.5,faceH:14,gapX:.4,gapY:.4,minM:.5,padX:.8,padT:.75,padB:.7,frame:.25,logoLH:1.5,logoRH:1.5,logoLO:100,logoRO:100,logoGap:.35,titlePt:24,subPt:10,ruleW:2.4,pPostoPt:9.5,pNomePt:13,secPt:9.5,secLS:12,itemPt:11.5,itemLH:1.28,secGap:.38,secHeadGap:.1,gHead:.3,gTitle:.12,gRule:.18,gPessoa:.3,gMenu:.35,flagW:4.6,flagH:3.6,flagOp:80,flagFade:92,titleF:"Cinzel",subF:"CormorantI",pessoaF:"Cinzel",itemF:"Cormorant",secF:"Cinzel",titleC:"",subC:"",pessoaC:"",itemC:"",secC:"",ruleC:"",titleO:100,subO:100,pessoaO:100,menuO:100,logosO:100,ruleO:100,...zero(["logoLDX","logoLDY","logoRDX","logoRDY","logoLR","logoRR","titleDX","titleDY","subDX","subDY","ruleDX","ruleDY","pessoaDX","pessoaDY","menuDX","menuDY","logosR","titleR","subR","pessoaR"])}}};
 const LABEL_BASE={pad:.2,frame:.08,postoPt:7,nomePt:14,evtPt:5.5,ruleW:1.2,gap1:.04,gap2:.04,gap3:.04,logoLH:.85,logoRH:1.25,flagW:2,flagH:1.3};
 function scaleLabel(p,f){for(const k in LABEL_BASE)p[k]=+(LABEL_BASE[k]*f).toFixed(3)}
 /* ---------- estado ---------- */
-const S={tab:"prismas",c:{theme:"gala",evt:"",caps:true,showL:true,showR:true,flag:{on:false,code:"it",swap:false,only:false},extra:[]},g:{},menu:{title:"Cardápio",front:MENU_F,titleB:"",back:"",per:false,copies:10},zoom:1,panel:"nomes",scope:"all",sel:{b:null,item:null}};
+const S={tab:"prismas",c:{theme:"gala",evt:"",caps:true,showL:true,showR:true,flag:{on:false,code:"it",swap:false,only:false},extra:[]},g:{},menu:{title:"Cardápio",front:MENU_F,titleB:"",back:"",per:false,copies:10},env:{type:"cargo",trat:"Ao Senhor",text:"",rem:"",copies:14},zoom:1,panel:"nomes",scope:"all",sel:{b:null,item:null}};
 const imgs={},ART={};let people=[];
-function freshGen(t){const p={...GEN[t].def};const g={p,ov:{},paper:"a4",mode:"exact",per:t==="cardapio"?2:6,marks:true,artMode:"stretch",artHide:false};if(t==="etiquetas"){g.model=0;g.skip=1;g.offX=0;g.offY=0;applyModel(g,0)}return g}
+function freshGen(t){const p={...GEN[t].def};const g={p,ov:{},paper:"a4",mode:"exact",per:t==="cardapio"?2:6,marks:true,artMode:"stretch",artHide:false};if(t==="etiquetas"){const mi=MODELS.findIndex(m=>m.b==="Pimaco"&&m.g==="A4363");g.model=mi;g.skip=1;g.offX=0;g.offY=0;g.envLogo=false;applyModel(g,mi)}return g}
 function applyModel(g,id){const m=MODELS[id];if(!m)return;g.model=id;if(m.b==="Personalizado")return;const[t,l,pv,ph,h,w]=GR[m.g];g.paper=m.pp;Object.assign(g.p,{faceW:w,faceH:h,gapX:+(ph-w).toFixed(3),gapY:+(pv-h).toFixed(3)});g.mL=l;g.mT=t;g.cols=GR[m.g][6];g.rows=GR[m.g][7];scaleLabel(g.p,Math.min(2.2,Math.max(.6,h/2.54)));g.ov={}}
-const G=()=>S.g[S.tab],GD=()=>GEN[S.tab],BL=()=>({...GD().blocks,...extraBlocks()});
-const key=p=>p?(p.posto+"|"+p.nome):"_";
+const G=()=>S.g[S.tab],GD=()=>GEN[S.tab],BL=()=>({...(envMode()?BLK_ENV:GD().blocks),...extraBlocks()});
+const envMode=()=>S.tab==="etiquetas"&&S.env.type!=="nome";
+const key=p=>p?(p.rem?"_rem":p.posto+"|"+p.nome+(p.rest?"|"+p.rest.join("/"):"")):"_";
 function eff(k){const g=G();return k&&g.ov[k]?{...g.p,...g.ov[k]}:g.p}
 const curP=()=>S.scope==="one"&&S.sel.item?eff(S.sel.item):G().p;
 function clampK(k,v){const d=DEFS[k];if(!d)return v;v=Math.min(d.max,Math.max(d.min,v));return+(Math.round(v/d.step)*d.step).toFixed(4)}
@@ -778,6 +792,24 @@ function extraDef(t){const g=S.g[t];return t==="etiquetas"?+(.8*Math.min(2.2,Mat
 function registerExtra(id){D(id+"DX","Horizontal","cm",-30,30,.01);D(id+"DY","Vertical","cm",-30,30,.01);D(id+"H","Tamanho","cm",.2,25,.05);D(id+"R","Girar","°",-180,180,1);D(id+"O","Transparência","%",0,100,1);for(const t in S.g){const p=S.g[t].p;if(!(id+"H"in p))Object.assign(p,{[id+"DX"]:0,[id+"DY"]:0,[id+"H"]:extraDef(t),[id+"R"]:0,[id+"O"]:100})}}
 function extraBlocks(){const o={};for(const e of S.c.extra||[])o[e.id]={n:e.name,sz:e.id+"H",r:e.id+"R",o:e.id+"O",img:e.id,extra:1};return o}
 function drawExtras(ctx,s,P,W,H,B){const c=v=>v*s;for(const e of S.c.extra||[]){const im=imgs[e.id];if(!e.show||!im||!((e.id+"H")in P))continue;let h=P[e.id+"H"],w=h*im.width/im.height;if(w>W*.9){w=W*.9;h=w*im.height/im.width}const x=W/2-w/2+P[e.id+"DX"],y=H/2-h/2+P[e.id+"DY"];put(ctx,B,s,e.id,c(x),c(y),c(w),c(h),P[e.id+"R"],P[e.id+"O"],()=>ctx.drawImage(im,c(x),c(y),c(w),c(h)))}}
+let envRecs=[];
+const TRAT_RE=/^(ao|à|a|aos|às)\s+(sua\s+excel|excel|ilustr|senhor|senhora|sr|sra|ilmo|exmo|dign|magn|reverend|vossa)/i;
+function parseEnv(t){const out=[];for(const blk of(t||"").split(/\n\s*\n/)){const lines=blk.split("\n").map(l=>l.trim()).filter(Boolean);if(!lines.length)continue;
+ if(lines.length>1&&lines.every(l=>l.includes("\t"))){for(const l of lines){const c=l.split("\t").map(x=>x.trim()).filter(Boolean);if(!c.length)continue;let trat=null;if(TRAT_RE.test(c[0]))trat=c.shift();const p=parse(c.shift()||"");if(p)out.push({...p,trat,rest:c})}continue}
+ let trat=null;if(TRAT_RE.test(lines[0])&&lines.length>1)trat=lines.shift();let first=lines.shift();if(first.includes("\t")){const c=first.split("\t").map(x=>x.trim()).filter(Boolean);first=c.shift();lines.unshift(...c)}const p=parse(first);if(p)out.push({...p,trat,rest:lines})}return out}
+function faceEnv(ctx,s,P,p){const W=P.faceW,H=P.faceH,c=v=>v*s,B=[],{T}=background(ctx,s,P,W,H,B),E=S.env;let L=P.pad+.15,R=W-P.pad-.15;
+ if(G().envLogo&&imgs.L){let h=Math.min(P.logoLH,H-.3),w=h*imgs.L.width/imgs.L.height;const x=P.pad+.1+P.logoLDX,y=H/2-h/2+P.logoLDY;put(ctx,B,s,"logoL",c(x),c(y),c(w),c(h),P.logoLR,P.logoLO,()=>ctx.drawImage(imgs.L,c(x),c(y),c(w),c(h)));L=P.pad+.1+w+.25}
+ const up=t=>S.c.caps?t.toLocaleUpperCase("pt-BR"):t,ln=[];
+ if(p.rem){let first=true;(E.rem||"").split("\n").map(x=>x.trim()).filter(Boolean).forEach((t,i)=>{if(i===0&&/:$/.test(t)){ln.push({t,f:"CormorantI",w:.85,col:T.evt});return}ln.push(first?{t:up(t),f:P.envF,w:1.05,col:T.nome}:{t,f:"Cormorant",w:.95,col:T.posto});first=false})}
+ else{const trat=p.trat!=null?p.trat:E.trat;if(trat)ln.push({t:trat,f:"CormorantI",w:.92,col:T.evt});
+  if(E.type==="cargo"){if(p.posto)ln.push({t:p.posto,f:"Cormorant",w:1,col:T.posto});ln.push({t:up(p.nome),f:P.envF,w:1.12,col:T.nome});(p.rest||[]).forEach(t=>ln.push({t,f:"CormorantI",w:.95,col:T.posto}))}
+  else{if(p.posto)ln.push({t:p.posto,f:"Cormorant",w:.95,col:T.posto});ln.push({t:up(p.nome),f:P.envF,w:1.12,col:T.nome});const r=p.rest||[];r.forEach((t,i)=>ln.push({t,f:"Cormorant",w:1,col:T.nome,b:/cep/i.test(t)||(i===r.length-1&&/\d{5}-?\d{3}/.test(t))}))}}
+ if(!ln.length)return B;
+ const base=c(P.envPt*PT),aw=c(Math.max(.5,R-L)),ah=c(H-2*Math.max(.15,P.pad*.6)),meas=f=>{let h=0,w=0;ln.forEach(l=>{const z=base*l.w*f;ctx.font=font(l.f,z);LS(ctx,l.f==="Cinzel"?z*.02:0);w=Math.max(w,ctx.measureText(l.t).width);h+=z*P.envLH});LS(ctx,0);return{w,h}};
+ let f=1,m=meas(1);if(m.h>ah)f=Math.max(.35,ah/m.h);m=meas(f);if(m.w>aw){f=Math.max(.3,f*aw/m.w);m=meas(f)}
+ const center=P.envAlign==="center",bx=center?c((L+R)/2)-m.w/2:c(L),by=c(H/2)-m.h/2;const x0=bx+c(P.envDX),y0=by+c(P.envDY);
+ put(ctx,B,s,"env",x0,y0,m.w,m.h,0,P.envO,()=>{let y=y0;ctx.textBaseline="alphabetic";ctx.textAlign=center?"center":"left";const tx=center?x0+m.w/2:x0;ln.forEach(l=>{const z=base*l.w*f;ctx.font=font(l.f,z);LS(ctx,l.f==="Cinzel"?z*.02:0);ctx.fillStyle=P.envC&&l.f===P.envF?P.envC:l.col;ctx.fillText(l.t,tx,y+z*P.envLH*.5+z*.33);if(l.b){}y+=z*P.envLH});LS(ctx,0);ctx.textAlign="center"});
+ drawExtras(ctx,s,P,W,H,B);return B}
 function drawFaceAt(ctx,s,x,y,W,H,k,flip,fn){ctx.save();ctx.translate((x+W*k/2)*s,(y+H*k/2)*s);if(flip)ctx.rotate(Math.PI);ctx.translate(-W*k/2*s,-H*k/2*s);ctx.beginPath();ctx.rect(0,0,W*k*s,H*k*s);ctx.clip();const B=fn(s*k);ctx.restore();return B}
 /* ---------- grade da folha ---------- */
 function paper(){return PAPERS[G().paper]||PAPERS.a4}
@@ -787,14 +819,14 @@ function layout(){const g=G(),P=g.p,gd=GD(),{w:PW,h:PH}=paper(),W=P.faceW,FH=P.f
  else{if(g.mode==="fill"){const b=bestGrid(g.per,W,CH0,PW,PH,P.minM,P.gapX,P.gapY);cols=b.c;rows=b.r;k=b.k}else{const fitN=(a,sz,gp)=>Math.max(1,Math.floor((a+gp+1e-6)/(sz+gp)));cols=fitN(PW-2*P.minM,W,P.gapX);rows=fitN(PH-2*P.minM,CH0,P.gapY)}
   mL=(PW-(cols*W*k+(cols-1)*P.gapX))/2;mT=(PH-(rows*CH0*k+(rows-1)*P.gapY))/2}
  return{PW,PH,W,FH,k,CW:W*k,CH:CH0*k,FHk:FH*k,cols,rows,mL,mT,gx:P.gapX,gy:P.gapY,per:cols*rows}}
-function items(){if(S.tab==="cardapio"&&!S.menu.per)return Array.from({length:Math.max(1,Math.min(200,S.menu.copies|0||1))},()=>null);const o=[];for(const p of people)for(let i=0;i<p.qty;i++)o.push(p);return o}
+function items(){if(S.tab==="etiquetas"&&S.env.type==="rem")return Array.from({length:Math.max(1,Math.min(500,S.env.copies|0||1))},()=>({rem:true,posto:"",nome:""}));if(envMode()){const o=[];for(const p of envRecs)for(let i=0;i<p.qty;i++)o.push(p);return o}if(S.tab==="cardapio"&&!S.menu.per)return Array.from({length:Math.max(1,Math.min(200,S.menu.copies|0||1))},()=>null);const o=[];for(const p of people)for(let i=0;i<p.qty;i++)o.push(p);return o}
 function pagesOf(L){const it=items(),off=S.tab==="etiquetas"?Math.min(Math.max(0,(G().skip|0)-1),L.per-1):0,out=[];for(let i=0;i<it.length;i++){const sl=i+off,pg=Math.floor(sl/L.per);(out[pg]||(out[pg]=[])).push({p:it[i],slot:sl%L.per})}return out}
 let HITS=[],LAY=null;
 function drawPage(cv,s,list,pi,L,ui,test){cv.width=Math.round(L.PW*s);cv.height=Math.round(L.PH*s);const ctx=cv.getContext("2d"),gd=GD(),c=v=>v*s,hits=[];ctx.fillStyle="#fff";ctx.fillRect(0,0,cv.width,cv.height);
  for(const{p,slot}of list){const x=L.mL+(slot%L.cols)*(L.CW+L.gx),y=L.mT+Math.floor(slot/L.cols)*(L.CH+L.gy),k=key(p),P=eff(k),info={pi,k,p,x,y,w:L.CW,h:L.CH,faces:[]};
   if(test){ctx.strokeStyle="#333";ctx.lineWidth=Math.max(1,c(.01));ctx.strokeRect(c(x),c(y),c(L.CW),c(L.CH));ctx.fillStyle="#333";ctx.font=`${c(Math.min(.4,L.CH*.3))}px system-ui`;ctx.textAlign="center";ctx.fillText(String(slot+1),c(x+L.CW/2),c(y+L.CH/2+.12));continue}
   if(gd.tent){const fn=back=>ss=>S.tab==="cardapio"?faceMenu(ctx,ss,P,p,back):facePE(ctx,ss,P,p);info.faces.push({x,y,flip:true,B:drawFaceAt(ctx,s,x,y,L.W,L.FH,L.k,true,fn(true))});info.faces.push({x,y:y+L.FHk,flip:false,B:drawFaceAt(ctx,s,x,y+L.FHk,L.W,L.FH,L.k,false,fn(false))})}
-  else info.faces.push({x,y,flip:false,B:drawFaceAt(ctx,s,x,y,L.W,L.FH,1,false,ss=>facePE(ctx,ss,P,p))});
+  else info.faces.push({x,y,flip:false,B:drawFaceAt(ctx,s,x,y,L.W,L.FH,1,false,ss=>envMode()?faceEnv(ctx,ss,P,p):facePE(ctx,ss,P,p))});
   if(gd.tent&&G().marks){if(THEMES[S.c.theme].bg==="#fff"&&!ART[S.tab]){ctx.strokeStyle="#d5d8de";ctx.lineWidth=Math.max(1,c(.01));ctx.strokeRect(c(x),c(y),c(L.CW),c(L.CH))}marks(ctx,s,x,y,L)}
   hits.push(info)}
  if(ui)HITS[pi]=hits}
@@ -874,7 +906,7 @@ function renderCtx(){const el=$("ctx"),b=S.sel.b,gd=GD();if(!b){el.innerHTML=`<s
  else{if(blk.f)parts.push(fontSel(blk.f));if(blk.sz)parts.push(stepper(blk.sz));if(blk.f2)parts.push(`<span class="vr"></span><span class="hintc">Títulos</span>`+fontSel(blk.f2)+stepper(blk.sz2));if(blk.c)parts.push(colBtn(blk.c));if(blk.c2)parts.push(colBtn(blk.c2));
   if(blk.sp)parts.push(`<button class="cb" data-pop="sp" title="Espaçamento">${IC.sp}</button>`);if(blk.o)parts.push(`<button class="cb" data-pop="op" title="Transparência">${IC.op}</button>`);if(blk.r)parts.push(stepper(blk.r,"Girar"));
   if(blk.img)parts.push(`<button class="cb" data-act="img" title="Trocar imagem">${IC.img}</button><button class="cb" data-act="hide" title="Ocultar">${IC.eye}</button>`);
-  if((b+"DX")in G().p)parts.push(`<button class="cb" data-act="center" title="Centralizar">${IC.ctr}</button>`)}
+  if(blk.align)parts.push(`<button class="cb" data-act="align" title="Alinhamento">${curP().envAlign==="center"?"Centralizado":"À esquerda"}</button>`);if((b+"DX")in G().p)parts.push(`<button class="cb" data-act="center" title="Centralizar">${IC.ctr}</button>`)}
  parts.push(`<span class="vr"></span><span class="seg" style="flex:none"><button data-sc="all" aria-pressed="${S.scope==="all"}">Todos</button><button data-sc="one" aria-pressed="${S.scope==="one"}" ${it?"":"disabled"}>Só ${it?esc(it.nome.split(" ")[0]):"este"}</button></span>`);
  parts.push(`<button class="cb" data-act="reset" title="Redefinir">${IC.rs}</button>`);
  el.innerHTML=parts.join("");const fl=$("ctxFlag");if(fl){fl.value=S.c.flag.code;fl.onchange=e=>{S.c.flag.code=e.target.value;$("flagCode").value=e.target.value;flagPv();save();render()}}syncCtx()}
@@ -888,11 +920,12 @@ $("ctx").addEventListener("click",e=>{const st=e.target.closest("[data-st]");if(
  const a=e.target.closest("[data-act]");if(!a)return;const act=a.dataset.act,b=S.sel.b,blk=BL()[b]||{};
  if(act==="reset"){snap();resetBlock(b);save();renderCtx();render()}
  else if(act==="center"){snap();setp(b+"DX",0);save();render()}
+ else if(act==="align"){snap();setp("envAlign",curP().envAlign==="center"?"left":"center");save();renderCtx();render()}
  else if(act==="hide"&&blk.img){hideEmb(blk.img);select(null,null);save();render()}
  else if(act==="img"&&blk.img)pickEmb(blk.img)});
 $("ctx").addEventListener("change",e=>{const i=e.target;if(i.dataset.k){snap();setp(i.dataset.k,+String(i.value).replace(",","."));save();syncCtx();render()}else if(i.dataset.fk){snap();setp(i.dataset.fk,i.value);save();render()}});
 $("ctx").addEventListener("keydown",e=>{if(e.key==="Enter"&&e.target.dataset.k)e.target.blur()});
-function blockKeys(b){const blk=BL()[b]||{},P=G().p,ks=new Set();for(const f of["sz","sz2","r","f","f2","c","c2","o"])if(blk[f])ks.add(blk[f]);(blk.sp||[]).forEach(k=>ks.add(k));if(blk.flag)["flagW","flagH","flagOp","flagFade"].forEach(k=>ks.add(k));for(const k of[b+"DX",b+"DY"])if(k in P)ks.add(k);if(b==="card")["textDX","textDY"].forEach(k=>k in P&&ks.add(k));return[...ks]}
+function blockKeys(b){const blk=BL()[b]||{},P=G().p,ks=new Set();for(const f of["sz","sz2","r","f","f2","c","c2","o","align"])if(blk[f])ks.add(blk[f]);(blk.sp||[]).forEach(k=>ks.add(k));if(blk.flag)["flagW","flagH","flagOp","flagFade"].forEach(k=>ks.add(k));for(const k of[b+"DX",b+"DY"])if(k in P)ks.add(k);if(b==="card")["textDX","textDY"].forEach(k=>k in P&&ks.add(k));return[...ks]}
 function resetBlock(b){const g=G(),ks=blockKeys(b),def={...GEN[S.tab].def};for(const e of S.c.extra||[])Object.assign(def,{[e.id+"DX"]:0,[e.id+"DY"]:0,[e.id+"H"]:extraDef(S.tab),[e.id+"R"]:0,[e.id+"O"]:100});if(S.tab==="etiquetas")scaleLabel(def,Math.min(2.2,Math.max(.6,g.p.faceH/2.54)));if(S.scope==="one"&&S.sel.item){const o=g.ov[S.sel.item];if(o){ks.forEach(k=>delete o[k]);if(!Object.keys(o).length)delete g.ov[S.sel.item]}}else ks.forEach(k=>{if(!SHEETK.has(k))g.p[k]=def[k]})}
 /* popovers */
 let popFor=null;
@@ -929,7 +962,7 @@ document.querySelectorAll("[data-close]").forEach(b=>b.onclick=()=>{S.panel=null
 function readList(){people=$("list").value.split("\n").map(parse).filter(Boolean)}
 function renderPpl(){$("ppl").innerHTML=people.map(p=>`<li data-k="${esc(key(p))}" class="${p.posto?"":"warn"}"><span><small>${esc(p.posto||"sem posto reconhecido")}</small><b>${esc(p.nome)}</b></span>${p.qty>1?`<span class="q">×${p.qty}</span>`:""}</li>`).join("");pplMark()}
 function pplMark(){document.querySelectorAll("#ppl li").forEach(li=>li.classList.toggle("on",li.dataset.k===S.sel.item))}
-$("ppl").addEventListener("click",e=>{const li=e.target.closest("li");if(!li)return;select(S.tab==="cardapio"?"pessoa":"nome",li.dataset.k);const s=findSel();if(s)PG[s.pi].wrap.scrollIntoView({block:"center",behavior:"smooth"})});
+$("ppl").addEventListener("click",e=>{const li=e.target.closest("li");if(!li)return;select(S.tab==="cardapio"?"pessoa":envMode()?"env":"nome",li.dataset.k);const s=findSel();if(s)PG[s.pi].wrap.scrollIntoView({block:"center",behavior:"smooth"})});
 $("list").addEventListener("input",()=>{readList();renderPpl();save();schedule()});
 $("sample").onclick=()=>{$("list").value=SAMPLE;readList();renderPpl();save();render()};$("clear").onclick=()=>{$("list").value="";readList();renderPpl();save();render();$("list").focus()};
 function renderThemes(){const keep=S.c.theme,fl=S.c.flag.on,tab=S.tab,p=people[0]||{posto:"Vice-Almirante",nome:"Barroso"};S.c.flag.on=false;S.tab="prismas";const sv=ART.prismas;ART.prismas=null;
@@ -980,9 +1013,20 @@ $("addFile").onchange=async e=>{const fs=[...e.target.files];e.target.value="";l
 $("swapFile").onchange=e=>{const f=e.target.files[0];e.target.value="";if(!f||!swapId)return;const fr=new FileReader();fr.onload=async()=>{store.set("emb."+swapId,fr.result);imgs[swapId]=await loadImg(fr.result);renderExtras();render()};fr.readAsDataURL(f)};
 $("extras").addEventListener("change",e=>{const el=e.target.closest("[data-e]");if(!el||!e.target.matches("[data-eshow]"))return;const x=S.c.extra.find(v=>v.id===el.dataset.e);x.show=e.target.checked;save();render()});
 $("extras").addEventListener("click",e=>{const el=e.target.closest("[data-e]");if(!el)return;const id=el.dataset.e;if(e.target.closest("[data-eswap]"))pickEmb(id);else if(e.target.closest("[data-edel]")){S.c.extra=S.c.extra.filter(v=>v.id!==id);store.del("emb."+id);delete imgs[id];if(S.sel.b===id)select(null,null);save();renderExtras();render()}});
+const ENV_HINT={cargo:"Uma pessoa por bloco, separadas por uma linha em branco. 1ª linha: posto e nome; linhas seguintes: cargo (quantas quiser). Para mudar o tratamento de alguém, comece o bloco com ele (ex.: “À Senhora”). Também aceita colar do Excel: uma pessoa por linha, colunas Nome | Cargo.",end:"Uma pessoa por bloco, separadas por uma linha em branco. 1ª linha: nome (com o posto, se quiser); linhas seguintes: endereço, bairro/cidade e CEP. Também aceita colar do Excel: uma pessoa por linha, colunas Nome | Endereço | Cidade | CEP."};
+const ENV_PH={cargo:"Almirante de Esquadra Fulano de Tal\nComandante de Operações Navais\n\nVA Barroso\nDiretor-Geral do Pessoal da Marinha",end:"VA Barroso\nRua Exemplo, 123 – Apto 401\nCopacabana – Rio de Janeiro/RJ\nCEP 22000-000"};
+function readEnv(){envRecs=parseEnv(S.env.text);$("envPpl").innerHTML=envRecs.map(p=>`<li><span><small>${esc((p.trat!=null?p.trat:S.env.trat)+(p.posto?" · "+p.posto:""))}</small><b>${esc(p.nome)}</b><small>${esc((p.rest||[]).join(" · ")||"—")}</small></span>${p.qty>1?`<span class="q">×${p.qty}</span>`:""}</li>`).join("")}
+$("envType").onchange=e=>{S.env.type=e.target.value;S.sel={b:null,item:null};save();syncPanels();renderCtx();render()};
+$("envTrat").onchange=e=>{S.env.trat=e.target.value;readEnv();save();render()};
+$("envText").addEventListener("input",e=>{S.env.text=e.target.value;readEnv();save();schedule()});
+$("remText").addEventListener("input",e=>{S.env.rem=e.target.value;save();schedule()});
+$("remCopies").oninput=e=>{S.env.copies=Math.max(1,Math.min(500,+e.target.value||1));save();schedule()};
+$("envLogo").onchange=e=>{G().envLogo=e.target.checked;save();renderCtx();render()};
+$("envFromList").onclick=()=>{const add=people.map(p=>(p.posto?p.posto+" ":"")+p.nome+(p.qty>1?" x"+p.qty:"")+"\n").join("\n");S.env.text=(S.env.text.trim()?S.env.text.trim()+"\n\n":"")+add;$("envText").value=S.env.text;readEnv();save();render();toast("Nomes copiados. Acrescente o cargo ou endereço embaixo de cada um.")};
+$("envClear").onclick=()=>{S.env.text="";$("envText").value="";readEnv();save();render()};
 function syncPanels(){const t=S.tab,g=G(),P=g.p;document.querySelectorAll(".rail [data-p]").forEach(b=>{b.hidden=b.dataset.only&&b.dataset.only!==t;b.setAttribute("aria-pressed",S.panel===b.dataset.p)});
  if(S.panel==="menu"&&t!=="cardapio")S.panel="nomes";$("panel").hidden=!S.panel;document.querySelectorAll("[data-panel]").forEach(s=>s.hidden=s.dataset.panel!==S.panel);
- $("mCopiesBox").hidden=M.per;$("paperTent").hidden=t==="etiquetas";$("paperLabel").hidden=t!=="etiquetas";
+ $("mCopiesBox").hidden=M.per;const et=t==="etiquetas";$("envBox").hidden=!et;$("nameBox").hidden=et&&S.env.type!=="nome";$("envDest").hidden=!(S.env.type==="cargo"||S.env.type==="end");$("envRem").hidden=S.env.type!=="rem";$("envLogoRow").hidden=S.env.type==="nome";$("envType").value=S.env.type;$("envTrat").value=S.env.trat;$("envLogo").checked=!!g.envLogo;$("envHint").textContent=ENV_HINT[S.env.type]||"";$("envText").placeholder=ENV_PH[S.env.type]||"";$("nomesTitle").textContent=et?"Etiquetas":"Nomes";document.querySelector('.rail [data-p=nomes]').lastChild.textContent=et?"Etiquetas":"Nomes";$("paperTent").hidden=t==="etiquetas";$("paperLabel").hidden=t!=="etiquetas";
  if(t==="etiquetas"){const m=MODELS[g.model]||MODELS[0];$("brand").value=m.b;fillModels(m.b);$("model").value=m.id;const L=layout();$("modelInfo").textContent=`${br(P.faceW*10,1)} × ${br(P.faceH*10,1)} mm · ${L.cols} × ${L.rows} = ${L.per} por folha · papel ${PAPERS[g.paper].n}`;
   $("modelNote").textContent=m.b==="Personalizado"?"Ajuste largura e altura clicando na etiqueta (quadro inteiro) ou mude o modelo.":m.est?"Margens estimadas (grade centralizada): confira com o teste de alinhamento.":m.b==="Colacril"||m.b==="Maxprint"?"Mesma grade da referência Pimaco equivalente. Confira com o teste de alinhamento na primeira vez.":m.b==="Avery"||m.b==="Folha comum"?"Grade padrão do modelo. Confira com o teste de alinhamento.":"Medidas e margens da tabela de referências do fabricante. Confira com o teste na primeira vez.";
   $("skip").value=g.skip;$("offX").value=g.offX;$("offY").value=g.offY}
@@ -994,7 +1038,7 @@ function syncPanels(){const t=S.tab,g=G(),P=g.p;document.querySelectorAll(".rail
  $("artSize").textContent=`Proporção ideal: ${br(P.faceW)} × ${br(P.faceH)} cm (ex.: ${Math.round(P.faceW/2.54*300)} × ${Math.round(P.faceH/2.54*300)} px).`;
  const fa=document.querySelector("#panel section:not([hidden]) textarea, #panel section:not([hidden]) input");undoBtns()}
 /* ---------- abas, zoom, salvar ---------- */
-function save(){store.set("list",$("list").value);store.set("state",JSON.stringify({c:S.c,g:S.g,menu:S.menu,panel:S.panel}))}
+function save(){store.set("list",$("list").value);store.set("state",JSON.stringify({c:S.c,g:S.g,menu:S.menu,env:S.env,panel:S.panel}))}
 function setTab(t){if(!GEN[t])t="prismas";S.tab=t;S.scope="all";S.sel={b:null,item:null};document.querySelectorAll(".tabs a").forEach(a=>a.setAttribute("aria-current",a.dataset.tab===t?"page":"false"));closePop();syncPanels();renderCtx();render()}
 addEventListener("hashchange",()=>setTab(location.hash.slice(1)));
 const Z=[.5,.75,1,1.25,1.5,2,2.5,3];$("zIn").onclick=()=>{S.zoom=Z.find(z=>z>S.zoom+.01)||3;render()};$("zOut").onclick=()=>{S.zoom=[...Z].reverse().find(z=>z<S.zoom-.01)||.5;render()};$("zFit").onclick=()=>{S.zoom=1;render()};
@@ -1003,11 +1047,11 @@ $("area").addEventListener("pointerdown",e=>{if(e.target===$("area")||e.target==
 new ResizeObserver(()=>schedule()).observe($("area"));
 (async()=>{
  $("hdrlogo").src=ANCORA;for(const t in GEN)S.g[t]=freshGen(t);
- try{const o=JSON.parse(store.get("state")||"null");if(o){Object.assign(S.c,o.c||{});S.c.flag={on:false,code:"it",swap:false,only:false,...(o.c&&o.c.flag)};S.c.extra=Array.isArray(o.c&&o.c.extra)?o.c.extra:[];for(const t in GEN)if(o.g&&o.g[t])S.g[t]={...S.g[t],...o.g[t],p:{...GEN[t].def,...o.g[t].p}};Object.assign(S.menu,o.menu||{});if("panel"in o)S.panel=o.panel}}catch(e){}
+ try{const o=JSON.parse(store.get("state")||"null");if(o){Object.assign(S.c,o.c||{});S.c.flag={on:false,code:"it",swap:false,only:false,...(o.c&&o.c.flag)};S.c.extra=Array.isArray(o.c&&o.c.extra)?o.c.extra:[];for(const t in GEN)if(o.g&&o.g[t])S.g[t]={...S.g[t],...o.g[t],p:{...GEN[t].def,...o.g[t].p}};Object.assign(S.menu,o.menu||{});Object.assign(S.env,o.env||{});if("panel"in o)S.panel=o.panel}}catch(e){}
  if(!THEMES[S.c.theme])S.c.theme="gala";
  $("evt").value=S.c.evt||"";$("caps").checked=S.c.caps;$("showL").checked=S.c.showL;$("showR").checked=S.c.showR;
  $("flagOn").checked=S.c.flag.on;$("flagCode").value=S.c.flag.code;$("flagSwap").checked=S.c.flag.swap;$("flagBr").checked=S.c.flag.only;flagPv();
- $("mTitle").value=M.title;$("mTitleB").value=M.titleB;$("mFront").value=M.front;$("mBack").value=M.back;$("mPer").checked=M.per;$("mCopies").value=M.copies;
+ $("envText").value=S.env.text;$("remText").value=S.env.rem;$("remCopies").value=S.env.copies;readEnv();$("mTitle").value=M.title;$("mTitleB").value=M.titleB;$("mFront").value=M.front;$("mBack").value=M.back;$("mPer").checked=M.per;$("mCopies").value=M.copies;
  const sv=store.get("list");$("list").value=sv!==null?sv:SAMPLE;readList();renderPpl();
  await Promise.all([setImg("L",store.get("imgL")||ANCORA),setImg("R",store.get("imgR")||BRASAO),...Object.keys(GEN).map(async t=>{ART[t]=await loadImg(store.get("art."+t))}),...["700 20px Cinzel","600 20px Cormorant","italic 600 20px Cormorant","600 20px Montserrat","700 20px Playfair",'400 20px "Great Vibes"'].map(f=>document.fonts.load(f))]);
  await Promise.all(S.c.extra.map(async e=>{imgs[e.id]=await loadImg(store.get("emb."+e.id))}));S.c.extra=S.c.extra.filter(e=>imgs[e.id]);S.c.extra.forEach(e=>registerExtra(e.id));renderExtras();flagImg("br");flagImg(S.c.flag.code);renderThemes();setTab(location.hash.slice(1)||"prismas");
