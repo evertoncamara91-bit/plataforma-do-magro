@@ -149,19 +149,43 @@ input:focus,textarea:focus,select:focus{outline:2px solid var(--sel);outline-off
 <button data-p="bandeiras" aria-pressed="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 21V4"/><path d="M5 4h12l-2.5 4L17 12H5"/></svg>Bandeiras</button>
 <button data-p="moldura" aria-pressed="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><rect x="7" y="7" width="10" height="10" rx="1"/></svg>Moldura</button>
 <button data-p="emblemas" aria-pressed="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="5" r="2"/><path d="M12 7v14M8 11h8M5 14a7 7 0 0 0 14 0"/></svg>Emblemas</button>
+<button data-p="config" aria-pressed="false" style="margin-top:auto"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg>Config.</button>
 </nav>
 <aside class="panel" id="panel" hidden>
 <section data-panel="nomes"><h2><span id="nomesTitle">Nomes</span> <button class="x" data-close aria-label="Fechar">×</button></h2>
 <div id="envBox" hidden>
-<div class="fld"><label for="envType">Tipo de etiqueta</label><select id="envType"><option value="cargo">Destinatário – trabalho (posto, nome e cargo)</option><option value="end">Destinatário – residência (nome e endereço)</option><option value="rem">Remetente (mesmo texto em todas)</option><option value="nome">Só o nome (igual ao prisma)</option></select></div>
-<div id="envDest"><div class="fld" style="margin-top:10px"><label for="envTrat">Tratamento</label><select id="envTrat"><option>Ao Senhor</option><option>À Senhora</option><option>A Sua Excelência o Senhor</option><option>A Sua Excelência a Senhora</option><option>Ao Excelentíssimo Senhor</option><option>Ao Ilustríssimo Senhor</option><option value="">Sem tratamento</option></select></div>
-<div class="fld" style="margin-top:10px"><label for="envText">Destinatários</label><textarea id="envText" spellcheck="false" style="min-height:220px"></textarea></div>
-<p class="hint" id="envHint"></p>
-<div class="row"><button class="lnk" id="envFromList">Puxar da lista de Nomes</button><button class="lnk" id="envClear" style="color:var(--mute)">Limpar</button></div>
-<ul class="ppl" id="envPpl"></ul></div>
-<div id="envRem"><div class="fld" style="margin-top:10px"><label for="remText">Texto do remetente</label><textarea id="remText" spellcheck="false" style="min-height:140px" placeholder="Remetente:&#10;Gabinete do Comandante&#10;Praça Barão de Ladário, s/nº – Centro&#10;Rio de Janeiro/RJ – CEP 20091-000"></textarea></div>
-<div class="fld" style="margin-top:10px"><label for="remCopies">Quantas etiquetas</label><input type="number" id="remCopies" min="1" max="500"></div></div>
-<label class="tg" style="margin-top:6px" id="envLogoRow">Emblema na etiqueta<input type="checkbox" id="envLogo"></label>
+<div class="fld"><label for="envType">Tipo de etiqueta</label><select id="envType"><option value="mil">Militares</option><option value="esp">Esposa</option><option value="espd">Esposas destinatárias</option><option value="rem">Remetente</option></select></div>
+<div id="secMil">
+<div class="fld" style="margin-top:12px"><label for="fTrat">Tratamento</label><select id="fTrat" class="tratSel"></select></div>
+<div class="fld" style="margin-top:10px"><label for="fForca">Força <span style="opacity:.7">(não sai na etiqueta)</span></label><select id="fForca"><option>Marinha</option><option>Exército</option><option>Aeronáutica</option></select></div>
+<div class="grid2" style="margin-top:10px"><div class="fld"><label for="fPosto">Posto</label><select id="fPosto"></select></div><div class="fld"><label for="fComp">Complemento</label><input type="text" id="fComp" list="compList" placeholder="(IM), (RM1)…" autocomplete="off"></div></div>
+<div class="fld" style="margin-top:10px"><label for="fNome">Autoridade</label><input type="text" id="fNome" list="dbNames" placeholder="Escolha da lista ou digite" autocomplete="off"></div>
+<div class="fld" style="margin-top:10px"><label for="fCargo">Cargo</label><input type="text" id="fCargo" list="dbCargos" placeholder="Preenche sozinho ou digite" autocomplete="off"></div>
+<div class="fld" style="margin-top:10px"><label for="fEnd">Endereço</label><textarea id="fEnd" style="min-height:72px" placeholder="Rua, número – complemento&#10;Bairro – Cidade/UF&#10;CEP 00000-000"></textarea></div>
+<div class="grid2" style="margin-top:10px;align-items:end"><div class="fld"><label for="fQty">Quantidade</label><input type="number" id="fQty" min="1" max="50"></div><button class="btn" id="fAdd" style="background:var(--navy);color:#fff;border-color:var(--navy)">Adicionar</button></div>
+<div class="row"><button class="lnk" id="fCancel" hidden>Cancelar edição</button><button class="lnk" id="fReset" style="color:var(--mute)">Limpar campos</button></div>
+<p class="hint" id="dbHint"></p>
+<h3 id="milCount">Etiquetas</h3><ul class="ppl" id="milList"></ul>
+<datalist id="dbNames"></datalist><datalist id="dbCargos"></datalist><datalist id="compList"><option value="(FN)"><option value="(IM)"><option value="(EN)"><option value="(CD)"><option value="(Md)"><option value="(T)"><option value="(RM1)"><option value="(RM1-FN)"><option value="(RM1-IM)"><option value="(RM1-EN)"><option value="(RM2)"></datalist>
+</div>
+<div id="secEsp">
+<div class="fld" style="margin-top:12px"><label for="eTrat">Tratamento</label><select id="eTrat" class="tratSel"></select></div>
+<div class="fld" style="margin-top:10px"><label for="espName">Nome da esposa</label><input type="text" id="espName" placeholder="Maria Helena Barroso"></div>
+<div class="fld" style="margin-top:10px"><label for="espCopies">Quantas etiquetas</label><input type="number" id="espCopies" min="1" max="500"></div>
+</div>
+<div id="secEspd">
+<div class="fld" style="margin-top:12px"><label for="dTrat">Tratamento</label><select id="dTrat" class="tratSel"></select></div>
+<div class="fld" style="margin-top:10px"><label for="espList">Nomes das esposas (um por linha)</label><textarea id="espList" spellcheck="false" style="min-height:180px" placeholder="Maria Helena Barroso&#10;Ana Paula Leite&#10;Cláudia Neves"></textarea></div>
+<p class="hint">Cada linha vira uma etiqueta. Termine com x2 para duas.</p>
+</div>
+<div id="secRem">
+<div class="fld" style="margin-top:12px"><label for="remText">Texto do remetente</label><textarea id="remText" spellcheck="false" style="min-height:130px" placeholder="Remetente:&#10;Gabinete do Comandante&#10;Endereço&#10;Cidade/UF – CEP"></textarea></div>
+<div class="fld" style="margin-top:10px"><label for="remCopies">Quantas etiquetas</label><input type="number" id="remCopies" min="1" max="500"></div>
+</div>
+<h3>Emblemas e figuras nesta etiqueta</h3>
+<div id="visList"></div>
+<button class="btn" id="addFig" style="width:100%;margin-top:8px">+ Adicionar figura ou emblema</button>
+<p class="hint">Cada tipo de etiqueta guarda as suas figuras. Clique numa figura na folha para arrastar, mudar o tamanho ou girar.</p>
 </div>
 <div id="nameBox">
 <textarea id="list" spellcheck="false" placeholder="VA Barroso&#10;Contra-Almirante (IM) Fulano&#10;Embaixador; João Silva"></textarea>
@@ -225,6 +249,27 @@ input:focus,textarea:focus,select:focus{outline:2px solid var(--sel);outline-off
 <input type="file" id="addFile" accept="image/*" multiple hidden><input type="file" id="swapFile" accept="image/*" hidden>
 <button class="btn" id="addEmb" style="width:100%;margin-top:10px">+ Adicionar emblema</button>
 <p class="hint">O emblema novo aparece no meio de cada face: arraste para posicionar, use os cantos para o tamanho e a setinha para girar. Use PNG com fundo transparente, 500 px ou mais.</p></section>
+<section data-panel="config"><h2>Configuração <button class="x" data-close aria-label="Fechar">×</button></h2>
+<h3 style="margin-top:0" id="dbTitle">Banco de autoridades</h3>
+<p class="hint" style="margin-top:0">Na etiqueta de Militares, ao escolher a autoridade, o posto, o cargo e o endereço preenchem sozinhos.</p>
+<input type="text" id="dbSearch" placeholder="Buscar por nome, posto ou cargo" style="margin-top:8px">
+<ul class="ppl" id="dbList" style="max-height:300px;overflow:auto"></ul>
+<details id="dbForm" style="border:1px solid var(--line);border-radius:10px;padding:8px 12px;margin-top:10px"><summary id="dbFormT" style="font-weight:600;cursor:pointer">+ Nova autoridade</summary>
+<div class="grid2" style="margin-top:8px"><div class="fld"><label for="dForca">Força</label><select id="dForca"><option>Marinha</option><option>Exército</option><option>Aeronáutica</option></select></div><div class="fld"><label for="dSit">Situação</label><select id="dSit"><option>Ativa</option><option>Reserva com cadeira</option><option>Reserva</option><option>Civil</option></select></div></div>
+<div class="grid2" style="margin-top:8px"><div class="fld"><label for="dPosto">Posto</label><select id="dPosto"></select></div><div class="fld"><label for="dComp">Complemento</label><input type="text" id="dComp" list="compList" autocomplete="off"></div></div>
+<div class="fld" style="margin-top:8px"><label for="dNome">Nome</label><input type="text" id="dNome"></div>
+<div class="fld" style="margin-top:8px"><label for="dCargo">Cargo</label><input type="text" id="dCargo" list="dbCargos" autocomplete="off"></div>
+<div class="fld" style="margin-top:8px"><label for="dEnd">Endereço</label><textarea id="dEnd" style="min-height:64px"></textarea></div>
+<div class="row" style="margin-top:10px"><button class="btn" id="dSave" style="background:var(--navy);color:#fff;border-color:var(--navy)">Salvar</button><button class="lnk" id="dDel" style="color:#b3261e" hidden>Excluir</button><button class="lnk" id="dCancel" style="color:var(--mute)">Cancelar</button></div>
+</details>
+<h3>Importar do Excel</h3>
+<textarea id="dbPaste" style="min-height:90px" placeholder="Cole aqui as linhas da planilha, nesta ordem de colunas:&#10;Força | Posto | Complemento | Nome | Cargo | Endereço | Situação"></textarea>
+<div class="row" style="margin-top:6px"><button class="btn" id="dbImport">Importar</button><input type="file" id="dbFile" accept=".csv,.txt,.tsv" hidden><button class="btn" id="dbFileBtn">Abrir CSV</button></div>
+<h3>Exportar</h3>
+<div class="row"><button class="btn" id="dbExport">Baixar planilha (CSV)</button><button class="btn" id="dbCopy">Copiar para o Excel</button></div>
+<p class="hint">O banco fica guardado neste navegador. Baixe a planilha de vez em quando como cópia de segurança e para levar a outro computador.</p>
+<button class="lnk" id="dbWipe" style="color:#b3261e;margin-top:8px">Apagar todo o banco</button>
+</section>
 </aside>
 <main class="ws">
 <div class="ctx" id="ctx"></div>
@@ -677,7 +722,7 @@ D("faceW","Largura","cm",1.5,30,.05);D("faceH","Altura","cm",1,30,.05);D("gapX",
 D("pad","Margem lateral","cm",0,4,.05);D("frame","Recuo da moldura","cm",0,2,.01);D("gap1","Posto → nome","cm",0,3,.01);D("gap2","Nome → filete","cm",0,3,.01);D("gap3","Filete → evento","cm",0,3,.01);
 for(const b of["posto","nome","evt","rule","logoL","logoR","text","title","sub","logos","pessoa","menu"]){D(b+"DX","Horizontal","cm",-15,15,.01);D(b+"DY","Vertical","cm",-15,15,.01)}
 for(const b of["posto","nome","evt","logoL","logoR","title","sub","pessoa","logos"]){D(b+"R","Girar","°",-180,180,1);D(b+"O","Transparência","%",0,100,1)}
-D("menuO","Transparência","%",0,100,1);D("envO","Transparência","%",0,100,1);D("envPt","Tamanho","pt",3,40,.5);D("envLH","Entrelinhas","×",.8,2.5,.02);D("envDX","Horizontal","cm",-15,15,.01);D("envDY","Vertical","cm",-15,15,.01);D("ruleO","Transparência","%",0,100,1);
+D("menuO","Transparência","%",0,100,1);D("envO","Transparência","%",0,100,1);D("envPt","Tamanho","pt",3,40,.5);D("envLH","Entrelinhas","×",.8,2.5,.02);D("envDX","Horizontal","cm",-15,15,.01);D("envDY","Vertical","cm",-15,15,.01);D("envPtW","Tamanho","pt",3,60,.5);D("envLHW","Entrelinhas","×",.8,2.5,.02);D("envOW","Transparência","%",0,100,1);D("envDXW","Horizontal","cm",-15,15,.01);D("envDYW","Vertical","cm",-15,15,.01);D("ruleO","Transparência","%",0,100,1);
 D("postoPt","Tamanho","pt",3,60,.5);D("nomePt","Tamanho","pt",3,90,.5);D("nomeLH","Entrelinhas","×",.7,2.5,.02);D("nomeLS","Espaço entre letras","%",-10,60,.5);D("evtPt","Tamanho","pt",3,40,.5);D("ruleW","Largura","cm",0,15,.05);
 D("logoLH","Tamanho","cm",.2,12,.05);D("logoRH","Tamanho","cm",.2,12,.05);
 D("flagW","Largura","cm",.3,20,.05);D("flagH","Altura","cm",.3,20,.05);D("flagOp","Intensidade","%",5,100,1);D("flagFade","Degradê","%",5,100,1);
@@ -690,21 +735,22 @@ const zero=ks=>Object.fromEntries(ks.map(k=>[k,0]));
 /* blocos: nome, tamanho (sz), giro (r), fonte (f), cor (c), espaçamentos (sp), transparência (o) */
 const BLK_PE={posto:{n:"Posto",sz:"postoPt",r:"postoR",f:"postoF",c:"postoC",o:"postoO"},nome:{n:"Nome",sz:"nomePt",r:"nomeR",f:"nomeF",c:"nomeC",o:"nomeO",sp:["nomeLS","nomeLH"]},evt:{n:"Evento",sz:"evtPt",r:"evtR",f:"evtF",c:"evtC",o:"evtO"},rule:{n:"Filete",sz:"ruleW",c:"ruleC",o:"ruleO"},logoL:{n:"Emblema 1",sz:"logoLH",r:"logoLR",o:"logoLO",img:"L"},logoR:{n:"Emblema 2",sz:"logoRH",r:"logoRR",o:"logoRO",img:"R"},flags:{n:"Bandeiras",flag:1},card:{n:"",sp:["pad","frame","gap1","gap2","gap3"]}};
 const BLK_M={logoL:{n:"Emblema 1",sz:"logoLH",r:"logoLR",o:"logoLO",img:"L"},logoR:{n:"Emblema 2",sz:"logoRH",r:"logoRR",o:"logoRO",img:"R"},title:{n:"Título",sz:"titlePt",r:"titleR",f:"titleF",c:"titleC",o:"titleO"},sub:{n:"Evento",sz:"subPt",r:"subR",f:"subF",c:"subC",o:"subO"},rule:{n:"Filete",sz:"ruleW",c:"ruleC",o:"ruleO"},pessoa:{n:"Autoridade",sz:"pNomePt",sz2:"pPostoPt",r:"pessoaR",f:"pessoaF",c:"pessoaC",o:"pessoaO"},menu:{n:"Pratos",sz:"itemPt",sz2:"secPt",f:"itemF",f2:"secF",c:"itemC",c2:"secC",o:"menuO",sp:["itemLH","secGap","secHeadGap","secLS"]},flags:{n:"Bandeiras",flag:1},card:{n:"",sp:["padX","padT","padB","frame","logoGap","gHead","gTitle","gRule","gPessoa","gMenu"]}};
-const BLK_ENV={env:{n:"Texto",sz:"envPt",f:"envF",c:"envC",o:"envO",sp:["envLH"],align:"envAlign"},logoL:{n:"Emblema",sz:"logoLH",r:"logoLR",o:"logoLO",img:"L"},flags:{n:"Bandeiras",flag:1},card:{n:"",sp:["pad","frame"]}};
+const isW=()=>S.env.type==="esp"||S.env.type==="espd",ek=k=>k+(isW()?"W":"");
+function blkEnv(){const w=isW()?"W":"";return{env:{n:"Texto",sz:"envPt"+w,f:"envF"+w,c:"envC"+w,o:"envO"+w,sp:["envLH"+w],align:"envAlign"+w,dx:"envDX"+w,dy:"envDY"+w},logoL:{n:"Emblema 1",sz:"logoLH",r:"logoLR",o:"logoLO",img:"L"},logoR:{n:"Emblema 2",sz:"logoRH",r:"logoRR",o:"logoRO",img:"R"},flags:{n:"Bandeiras",flag:1},card:{n:"",sp:["pad","frame"]}}}
 const BASE_PE={pad:.45,frame:.2,postoPt:13,nomePt:22.5,nomeLH:1.08,nomeLS:3,evtPt:8.5,ruleW:1.9,gap1:.13,gap2:.08,gap3:.07,logoLH:1.4,logoRH:2.3,flagW:3,flagH:2.2,flagOp:85,flagFade:75,postoF:"Cormorant",nomeF:"Cinzel",evtF:"CormorantI",postoC:"",nomeC:"",evtC:"",ruleC:"",postoO:100,nomeO:100,evtO:100,ruleO:100,logoLO:100,logoRO:100,...zero(["postoDX","postoDY","nomeDX","nomeDY","evtDX","evtDY","ruleDX","ruleDY","textDX","textDY","logoLDX","logoLDY","logoRDX","logoRDY","postoR","nomeR","evtR","logoLR","logoRR"])};
 const GEN={prismas:{label:"Prismas",one:"prisma",many:"prismas",tent:true,blocks:BLK_PE,per:[1,2,3,4,6,8],def:{faceW:8.65,faceH:4.43,gapX:.5,gapY:.4,minM:.5,...BASE_PE}},
- etiquetas:{label:"Etiquetas",one:"etiqueta",many:"etiquetas",tent:false,blocks:BLK_PE,def:{faceW:6.35,faceH:2.54,gapX:.26,gapY:0,minM:0,...BASE_PE,envPt:11,envLH:1.15,envF:"Cinzel",envC:"",envO:100,envDX:0,envDY:0,envAlign:"left"}},
+ etiquetas:{label:"Etiquetas",one:"etiqueta",many:"etiquetas",tent:false,blocks:BLK_PE,def:{faceW:6.35,faceH:2.54,gapX:.26,gapY:0,minM:0,...BASE_PE,envPt:11,envLH:1.15,envF:"Cinzel",envC:"",envO:100,envDX:0,envDY:0,envAlign:"left",envPtW:18,envLHW:1.1,envFW:"Vibes",envCW:"",envOW:100,envDXW:0,envDYW:0,envAlignW:"center"}},
  cardapio:{label:"Cardápio",one:"cardápio",many:"cardápios",tent:true,blocks:BLK_M,per:[1,2,4],def:{faceW:9.5,faceH:14,gapX:.4,gapY:.4,minM:.5,padX:.8,padT:.75,padB:.7,frame:.25,logoLH:1.5,logoRH:1.5,logoLO:100,logoRO:100,logoGap:.35,titlePt:24,subPt:10,ruleW:2.4,pPostoPt:9.5,pNomePt:13,secPt:9.5,secLS:12,itemPt:11.5,itemLH:1.28,secGap:.38,secHeadGap:.1,gHead:.3,gTitle:.12,gRule:.18,gPessoa:.3,gMenu:.35,flagW:4.6,flagH:3.6,flagOp:80,flagFade:92,titleF:"Cinzel",subF:"CormorantI",pessoaF:"Cinzel",itemF:"Cormorant",secF:"Cinzel",titleC:"",subC:"",pessoaC:"",itemC:"",secC:"",ruleC:"",titleO:100,subO:100,pessoaO:100,menuO:100,logosO:100,ruleO:100,...zero(["logoLDX","logoLDY","logoRDX","logoRDY","logoLR","logoRR","titleDX","titleDY","subDX","subDY","ruleDX","ruleDY","pessoaDX","pessoaDY","menuDX","menuDY","logosR","titleR","subR","pessoaR"])}}};
 const LABEL_BASE={pad:.2,frame:.08,postoPt:7,nomePt:14,evtPt:5.5,ruleW:1.2,gap1:.04,gap2:.04,gap3:.04,logoLH:.85,logoRH:1.25,flagW:2,flagH:1.3};
 function scaleLabel(p,f){for(const k in LABEL_BASE)p[k]=+(LABEL_BASE[k]*f).toFixed(3)}
 /* ---------- estado ---------- */
-const S={tab:"prismas",c:{theme:"gala",evt:"",caps:true,showL:true,showR:true,flag:{on:false,code:"it",swap:false,only:false},extra:[]},g:{},menu:{title:"Cardápio",front:MENU_F,titleB:"",back:"",per:false,copies:10},env:{type:"cargo",trat:"Ao Senhor",text:"",rem:"",copies:14},zoom:1,panel:"nomes",scope:"all",sel:{b:null,item:null}};
+const S={tab:"prismas",c:{theme:"gala",evt:"",caps:true,showL:true,showR:true,flag:{on:false,code:"it",swap:false,only:false},extra:[]},g:{},menu:{title:"Cardápio",front:MENU_F,titleB:"",back:"",per:false,copies:10},env:{type:"mil",mil:[],form:{trat:"Ao Senhor",forca:"Marinha",posto:"",comp:"",nome:"",cargo:"",end:"",qty:1},esp:{trat:"À Senhora",nome:"",copies:1},espd:{trat:"À Senhora",list:""},rem:"",copies:14},zoom:1,panel:"nomes",scope:"all",sel:{b:null,item:null}};
 const imgs={},ART={};let people=[];
-function freshGen(t){const p={...GEN[t].def};const g={p,ov:{},paper:"a4",mode:"exact",per:t==="cardapio"?2:6,marks:true,artMode:"stretch",artHide:false};if(t==="etiquetas"){const mi=MODELS.findIndex(m=>m.b==="Pimaco"&&m.g==="A4363");g.model=mi;g.skip=1;g.offX=0;g.offY=0;g.envLogo=false;applyModel(g,mi)}return g}
+function freshGen(t){const p={...GEN[t].def};const g={p,ov:{},paper:"a4",mode:"exact",per:t==="cardapio"?2:6,marks:true,artMode:"stretch",artHide:false};if(t==="etiquetas"){const mi=MODELS.findIndex(m=>m.b==="Pimaco"&&m.g==="A4363");g.model=mi;g.skip=1;g.offX=0;g.offY=0;g.vis={mil:{L:true},esp:{},espd:{},rem:{L:true}};applyModel(g,mi)}return g}
 function applyModel(g,id){const m=MODELS[id];if(!m)return;g.model=id;if(m.b==="Personalizado")return;const[t,l,pv,ph,h,w]=GR[m.g];g.paper=m.pp;Object.assign(g.p,{faceW:w,faceH:h,gapX:+(ph-w).toFixed(3),gapY:+(pv-h).toFixed(3)});g.mL=l;g.mT=t;g.cols=GR[m.g][6];g.rows=GR[m.g][7];scaleLabel(g.p,Math.min(2.2,Math.max(.6,h/2.54)));g.ov={}}
-const G=()=>S.g[S.tab],GD=()=>GEN[S.tab],BL=()=>({...(envMode()?BLK_ENV:GD().blocks),...extraBlocks()});
-const envMode=()=>S.tab==="etiquetas"&&S.env.type!=="nome";
-const key=p=>p?(p.rem?"_rem":p.posto+"|"+p.nome+(p.rest?"|"+p.rest.join("/"):"")):"_";
+const G=()=>S.g[S.tab],GD=()=>GEN[S.tab],BL=()=>({...(envMode()?blkEnv():GD().blocks),...extraBlocks()});
+const envMode=()=>S.tab==="etiquetas";
+const key=p=>p?(p.k||(p.posto+"|"+p.nome)):"_";
 function eff(k){const g=G();return k&&g.ov[k]?{...g.p,...g.ov[k]}:g.p}
 const curP=()=>S.scope==="one"&&S.sel.item?eff(S.sel.item):G().p;
 function clampK(k,v){const d=DEFS[k];if(!d)return v;v=Math.min(d.max,Math.max(d.min,v));return+(Math.round(v/d.step)*d.step).toFixed(4)}
@@ -791,25 +837,20 @@ function faceMenu(ctx,s,P,p,back){const W=P.faceW,H=P.faceH,c=v=>v*s,B=[],{T}=ba
 function extraDef(t){const g=S.g[t];return t==="etiquetas"?+(.8*Math.min(2.2,Math.max(.6,(g?g.p.faceH:2.54)/2.54))).toFixed(2):t==="cardapio"?1.5:1.2}
 function registerExtra(id){D(id+"DX","Horizontal","cm",-30,30,.01);D(id+"DY","Vertical","cm",-30,30,.01);D(id+"H","Tamanho","cm",.2,25,.05);D(id+"R","Girar","°",-180,180,1);D(id+"O","Transparência","%",0,100,1);for(const t in S.g){const p=S.g[t].p;if(!(id+"H"in p))Object.assign(p,{[id+"DX"]:0,[id+"DY"]:0,[id+"H"]:extraDef(t),[id+"R"]:0,[id+"O"]:100})}}
 function extraBlocks(){const o={};for(const e of S.c.extra||[])o[e.id]={n:e.name,sz:e.id+"H",r:e.id+"R",o:e.id+"O",img:e.id,extra:1};return o}
-function drawExtras(ctx,s,P,W,H,B){const c=v=>v*s;for(const e of S.c.extra||[]){const im=imgs[e.id];if(!e.show||!im||!((e.id+"H")in P))continue;let h=P[e.id+"H"],w=h*im.width/im.height;if(w>W*.9){w=W*.9;h=w*im.height/im.width}const x=W/2-w/2+P[e.id+"DX"],y=H/2-h/2+P[e.id+"DY"];put(ctx,B,s,e.id,c(x),c(y),c(w),c(h),P[e.id+"R"],P[e.id+"O"],()=>ctx.drawImage(im,c(x),c(y),c(w),c(h)))}}
-let envRecs=[];
-const TRAT_RE=/^(ao|à|a|aos|às)\s+(sua\s+excel|excel|ilustr|senhor|senhora|sr|sra|ilmo|exmo|dign|magn|reverend|vossa)/i;
-function parseEnv(t){const out=[];for(const blk of(t||"").split(/\n\s*\n/)){const lines=blk.split("\n").map(l=>l.trim()).filter(Boolean);if(!lines.length)continue;
- if(lines.length>1&&lines.every(l=>l.includes("\t"))){for(const l of lines){const c=l.split("\t").map(x=>x.trim()).filter(Boolean);if(!c.length)continue;let trat=null;if(TRAT_RE.test(c[0]))trat=c.shift();const p=parse(c.shift()||"");if(p)out.push({...p,trat,rest:c})}continue}
- let trat=null;if(TRAT_RE.test(lines[0])&&lines.length>1)trat=lines.shift();let first=lines.shift();if(first.includes("\t")){const c=first.split("\t").map(x=>x.trim()).filter(Boolean);first=c.shift();lines.unshift(...c)}const p=parse(first);if(p)out.push({...p,trat,rest:lines})}return out}
+function drawExtras(ctx,s,P,W,H,B,vis){const c=v=>v*s;for(const e of S.c.extra||[]){const im=imgs[e.id];if(!(vis?vis(e.id):e.show)||!im||!((e.id+"H")in P))continue;let h=P[e.id+"H"],w=h*im.width/im.height;if(w>W*.9){w=W*.9;h=w*im.height/im.width}const x=W/2-w/2+P[e.id+"DX"],y=H/2-h/2+P[e.id+"DY"];put(ctx,B,s,e.id,c(x),c(y),c(w),c(h),P[e.id+"R"],P[e.id+"O"],()=>ctx.drawImage(im,c(x),c(y),c(w),c(h)))}}
+function envVis(id){const v=((G().vis||{})[S.env.type])||{};return!!v[id]}
 function faceEnv(ctx,s,P,p){const W=P.faceW,H=P.faceH,c=v=>v*s,B=[],{T}=background(ctx,s,P,W,H,B),E=S.env;let L=P.pad+.15,R=W-P.pad-.15;
- if(G().envLogo&&imgs.L){let h=Math.min(P.logoLH,H-.3),w=h*imgs.L.width/imgs.L.height;const x=P.pad+.1+P.logoLDX,y=H/2-h/2+P.logoLDY;put(ctx,B,s,"logoL",c(x),c(y),c(w),c(h),P.logoLR,P.logoLO,()=>ctx.drawImage(imgs.L,c(x),c(y),c(w),c(h)));L=P.pad+.1+w+.25}
- const up=t=>S.c.caps?t.toLocaleUpperCase("pt-BR"):t,ln=[];
- if(p.rem){let first=true;(E.rem||"").split("\n").map(x=>x.trim()).filter(Boolean).forEach((t,i)=>{if(i===0&&/:$/.test(t)){ln.push({t,f:"CormorantI",w:.85,col:T.evt});return}ln.push(first?{t:up(t),f:P.envF,w:1.05,col:T.nome}:{t,f:"Cormorant",w:.95,col:T.posto});first=false})}
- else{const trat=p.trat!=null?p.trat:E.trat;if(trat)ln.push({t:trat,f:"CormorantI",w:.92,col:T.evt});
-  if(E.type==="cargo"){if(p.posto)ln.push({t:p.posto,f:"Cormorant",w:1,col:T.posto});ln.push({t:up(p.nome),f:P.envF,w:1.12,col:T.nome});(p.rest||[]).forEach(t=>ln.push({t,f:"CormorantI",w:.95,col:T.posto}))}
-  else{if(p.posto)ln.push({t:p.posto,f:"Cormorant",w:.95,col:T.posto});ln.push({t:up(p.nome),f:P.envF,w:1.12,col:T.nome});const r=p.rest||[];r.forEach((t,i)=>ln.push({t,f:"Cormorant",w:1,col:T.nome,b:/cep/i.test(t)||(i===r.length-1&&/\d{5}-?\d{3}/.test(t))}))}}
- if(!ln.length)return B;
- const base=c(P.envPt*PT),aw=c(Math.max(.5,R-L)),ah=c(H-2*Math.max(.15,P.pad*.6)),meas=f=>{let h=0,w=0;ln.forEach(l=>{const z=base*l.w*f;ctx.font=font(l.f,z);LS(ctx,l.f==="Cinzel"?z*.02:0);w=Math.max(w,ctx.measureText(l.t).width);h+=z*P.envLH});LS(ctx,0);return{w,h}};
- let f=1,m=meas(1);if(m.h>ah)f=Math.max(.35,ah/m.h);m=meas(f);if(m.w>aw){f=Math.max(.3,f*aw/m.w);m=meas(f)}
- const center=P.envAlign==="center",bx=center?c((L+R)/2)-m.w/2:c(L),by=c(H/2)-m.h/2;const x0=bx+c(P.envDX),y0=by+c(P.envDY);
- put(ctx,B,s,"env",x0,y0,m.w,m.h,0,P.envO,()=>{let y=y0;ctx.textBaseline="alphabetic";ctx.textAlign=center?"center":"left";const tx=center?x0+m.w/2:x0;ln.forEach(l=>{const z=base*l.w*f;ctx.font=font(l.f,z);LS(ctx,l.f==="Cinzel"?z*.02:0);ctx.fillStyle=P.envC&&l.f===P.envF?P.envC:l.col;ctx.fillText(l.t,tx,y+z*P.envLH*.5+z*.33);if(l.b){}y+=z*P.envLH});LS(ctx,0);ctx.textAlign="center"});
- drawExtras(ctx,s,P,W,H,B);return B}
+ for(const sd of["L","R"]){const im=imgs[sd];if(!im||!envVis(sd))continue;let h=Math.min(P["logo"+sd+"H"],H-.2),w=h*im.width/im.height;if(w>W*.35){w=W*.35;h=w*im.height/im.width}const x=(sd==="L"?P.pad+.1:W-P.pad-.1-w)+P["logo"+sd+"DX"],y=H/2-h/2+P["logo"+sd+"DY"];put(ctx,B,s,"logo"+sd,c(x),c(y),c(w),c(h),P["logo"+sd+"R"],P["logo"+sd+"O"],()=>ctx.drawImage(im,c(x),c(y),c(w),c(h)));if(sd==="L")L=Math.max(L,P.pad+.1+w+.25);else R=Math.min(R,W-P.pad-.1-w-.25)}
+ const F=P[ek("envF")],up=t=>S.c.caps&&F!=="Vibes"?t.toLocaleUpperCase("pt-BR"):t,ln=[];
+ if(p.rem){let first=true;(E.rem||"").split("\n").map(x=>x.trim()).filter(Boolean).forEach((t,i)=>{if(i===0&&/:$/.test(t)){ln.push({t,f:"CormorantI",w:.85,col:T.evt});return}ln.push(first?{t:up(t),f:F,w:1.05,col:T.nome,main:1}:{t,f:"Cormorant",w:.95,col:T.posto});first=false})}
+ else if(isW()){if(p.trat)ln.push({t:p.trat,f:"CormorantI",w:.62,col:T.evt});ln.push({t:up(p.nome),f:F,w:1,col:T.nome,main:1})}
+ else{if(p.trat)ln.push({t:p.trat,f:"CormorantI",w:.92,col:T.evt});const pc=[p.posto,p.comp].filter(Boolean).join(" ");if(pc)ln.push({t:pc,f:"Cormorant",w:1,col:T.posto});ln.push({t:up(p.nome||""),f:F,w:1.12,col:T.nome,main:1});
+  (p.cargo||"").split("\n").map(t=>t.trim()).filter(Boolean).forEach(t=>ln.push({t,f:"CormorantI",w:.95,col:T.posto}));(p.end||"").split(/\n| \/ /).map(t=>t.trim()).filter(Boolean).forEach(t=>ln.push({t,f:"Cormorant",w:.95,col:T.nome}))}
+ if(ln.length){const base=c(P[ek("envPt")]*PT),LH=P[ek("envLH")],aw=c(Math.max(.5,R-L)),ah=c(H-2*Math.max(.15,P.pad*.6)),meas=f=>{let h=0,w=0;ln.forEach(l=>{const z=base*l.w*f;ctx.font=font(l.f,z);LS(ctx,l.f==="Cinzel"?z*.02:0);w=Math.max(w,ctx.measureText(l.t).width);h+=z*LH});LS(ctx,0);return{w,h}};
+  let f=1,m=meas(1);if(m.h>ah)f=Math.max(.3,ah/m.h);m=meas(f);if(m.w>aw){f=Math.max(.25,f*aw/m.w);m=meas(f)}
+  const center=P[ek("envAlign")]==="center",x0=(center?c((L+R)/2)-m.w/2:c(L))+c(P[ek("envDX")]),y0=c(H/2)-m.h/2+c(P[ek("envDY")]),col2=P[ek("envC")];
+  put(ctx,B,s,"env",x0,y0,m.w,m.h,0,P[ek("envO")],()=>{let y=y0;ctx.textBaseline="alphabetic";ctx.textAlign=center?"center":"left";const tx=center?x0+m.w/2:x0;ln.forEach(l=>{const z=base*l.w*f;ctx.font=font(l.f,z);LS(ctx,l.f==="Cinzel"?z*.02:0);ctx.fillStyle=col2&&l.main?col2:l.col;ctx.fillText(l.t,tx,y+z*LH*.5+z*.33);y+=z*LH});LS(ctx,0);ctx.textAlign="center"})}
+ drawExtras(ctx,s,P,W,H,B,envVis);return B}
 function drawFaceAt(ctx,s,x,y,W,H,k,flip,fn){ctx.save();ctx.translate((x+W*k/2)*s,(y+H*k/2)*s);if(flip)ctx.rotate(Math.PI);ctx.translate(-W*k/2*s,-H*k/2*s);ctx.beginPath();ctx.rect(0,0,W*k*s,H*k*s);ctx.clip();const B=fn(s*k);ctx.restore();return B}
 /* ---------- grade da folha ---------- */
 function paper(){return PAPERS[G().paper]||PAPERS.a4}
@@ -819,7 +860,13 @@ function layout(){const g=G(),P=g.p,gd=GD(),{w:PW,h:PH}=paper(),W=P.faceW,FH=P.f
  else{if(g.mode==="fill"){const b=bestGrid(g.per,W,CH0,PW,PH,P.minM,P.gapX,P.gapY);cols=b.c;rows=b.r;k=b.k}else{const fitN=(a,sz,gp)=>Math.max(1,Math.floor((a+gp+1e-6)/(sz+gp)));cols=fitN(PW-2*P.minM,W,P.gapX);rows=fitN(PH-2*P.minM,CH0,P.gapY)}
   mL=(PW-(cols*W*k+(cols-1)*P.gapX))/2;mT=(PH-(rows*CH0*k+(rows-1)*P.gapY))/2}
  return{PW,PH,W,FH,k,CW:W*k,CH:CH0*k,FHk:FH*k,cols,rows,mL,mT,gx:P.gapX,gy:P.gapY,per:cols*rows}}
-function items(){if(S.tab==="etiquetas"&&S.env.type==="rem")return Array.from({length:Math.max(1,Math.min(500,S.env.copies|0||1))},()=>({rem:true,posto:"",nome:""}));if(envMode()){const o=[];for(const p of envRecs)for(let i=0;i<p.qty;i++)o.push(p);return o}if(S.tab==="cardapio"&&!S.menu.per)return Array.from({length:Math.max(1,Math.min(200,S.menu.copies|0||1))},()=>null);const o=[];for(const p of people)for(let i=0;i<p.qty;i++)o.push(p);return o}
+function items(){if(S.tab==="etiquetas"){const E=S.env;let o=[];
+ if(E.type==="mil")E.mil.forEach(r=>{for(let i=0;i<(r.qty||1);i++)o.push(r)});
+ else if(E.type==="esp"){const n=E.esp.nome.trim();if(n)for(let i=0;i<Math.max(1,Math.min(500,E.esp.copies|0||1));i++)o.push({k:"esp",nome:n,trat:E.esp.trat})}
+ else if(E.type==="espd")E.espd.list.split("\n").forEach(l=>{let t=l.trim(),q=1,m;if(!t)return;if(m=t.match(/\s+x\s*(\d{1,2})$/i)){q=+m[1];t=t.slice(0,m.index).trim()}for(let i=0;i<q;i++)o.push({k:"w|"+t,nome:t,trat:E.espd.trat})});
+ else o=Array.from({length:Math.max(1,Math.min(500,E.copies|0||1))},()=>({k:"_rem",rem:true}));
+ return o}
+ if(S.tab==="cardapio"&&!S.menu.per)return Array.from({length:Math.max(1,Math.min(200,S.menu.copies|0||1))},()=>null);const o=[];for(const p of people)for(let i=0;i<p.qty;i++)o.push(p);return o}
 function pagesOf(L){const it=items(),off=S.tab==="etiquetas"?Math.min(Math.max(0,(G().skip|0)-1),L.per-1):0,out=[];for(let i=0;i<it.length;i++){const sl=i+off,pg=Math.floor(sl/L.per);(out[pg]||(out[pg]=[])).push({p:it[i],slot:sl%L.per})}return out}
 let HITS=[],LAY=null;
 function drawPage(cv,s,list,pi,L,ui,test){cv.width=Math.round(L.PW*s);cv.height=Math.round(L.PH*s);const ctx=cv.getContext("2d"),gd=GD(),c=v=>v*s,hits=[];ctx.fillStyle="#fff";ctx.fillRect(0,0,cv.width,cv.height);
@@ -870,7 +917,7 @@ function onDown(e){const cv=e.currentTarget,pi=+cv.dataset.pi,pt=ptOf(cv,e),h=hi
  if(!h){select(null,null);return}
  if(!h.bx){select("card",h.it.k);return}
  select(h.bx.b,h.it.k);hov(null);const b=h.bx.b;if(b==="flags")return;
- const pre=b==="logos"?"logos":b,kx=pre+"DX",ky=pre+"DY",P=curP();if(!(kx in P))return;
+ const bk=BL()[b]||{},kx=bk.dx||b+"DX",ky=bk.dy||b+"DY",P=curP();if(!(kx in P))return;
  snap();drag={t:"move",cv,pi,p0:pt,kx,ky,x0:P[kx],y0:P[ky],sign:h.f.flip?-1:1,moved:false};cv.setPointerCapture(e.pointerId);cv.addEventListener("pointermove",onDrag);cv.addEventListener("pointerup",endDrag,{once:true});e.preventDefault()}
 function onHandle(e){e.stopPropagation();e.preventDefault();const sel=findSel();if(!sel)return;const cv=PG[sel.pi].cv,pt=ptOf(cv,e),r=sel.r,c={x:r.x+r.w/2,y:r.y+r.h/2},P=curP(),blk=BL()[S.sel.b]||{},hd=e.currentTarget.dataset.h;
  snap();drag={t:hd==="rot"?"rot":"size",hd,cv,pi:sel.pi,p0:pt,c,P0:{...P},blk,r0:r};cv.setPointerCapture(e.pointerId);cv.addEventListener("pointermove",onDrag);cv.addEventListener("pointerup",endDrag,{once:true})}
@@ -892,7 +939,7 @@ document.addEventListener("keydown",e=>{const tag=document.activeElement.tagName
  if(e.key==="Escape"){select(null,null);closePop();return}
  const b=S.sel.b;if(!b||b==="card"||b==="flags")return;
  if(e.key==="Delete"||e.key==="Backspace"){const blk=BL()[b];if(blk.img){hideEmb(blk.img);select(null,null);save();render()}return}
- const st=e.shiftKey?.5:.05,mv={ArrowLeft:[-st,0],ArrowRight:[st,0],ArrowUp:[0,-st],ArrowDown:[0,st]}[e.key];if(!mv)return;e.preventDefault();const pre=b,P=curP();if(!((pre+"DX")in P))return;snap();setp(pre+"DX",P[pre+"DX"]+mv[0]);setp(pre+"DY",P[pre+"DY"]+mv[1]);save();render()});
+ const st=e.shiftKey?.5:.05,mv={ArrowLeft:[-st,0],ArrowRight:[st,0],ArrowUp:[0,-st],ArrowDown:[0,st]}[e.key];if(!mv)return;e.preventDefault();const bk=BL()[b]||{},kx=bk.dx||b+"DX",ky=bk.dy||b+"DY",P=curP();if(!(kx in P))return;snap();setp(kx,P[kx]+mv[0]);setp(ky,P[ky]+mv[1]);save();render()});
 /* ---------- barra contextual ---------- */
 const IC={sp:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 6h16M4 12h16M4 18h16"/><path d="M2 3v18M22 3v18" stroke-width="1.4"/></svg>',op:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 3a9 9 0 0 1 0 18z" fill="currentColor"/></svg>',rs:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 3-6.7L3 8"/><path d="M3 3v5h5"/></svg>',eye:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 3l18 18M10.6 6.1A9.7 9.7 0 0 1 12 6c5 0 9 6 9 6a17 17 0 0 1-3.1 3.6M6.6 6.6C4.3 8.1 3 12 3 12s4 6 9 6a8.8 8.8 0 0 0 4.4-1.2"/></svg>',img:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="9" cy="9" r="2"/><path d="m21 15-5-5L5 21"/></svg>',ctr:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 2v20M7 7h10M5 12h14M8 17h8"/></svg>'};
 const stepper=(k,lbl)=>{const d=DEFS[k];return`<span class="step" title="${lbl||d.l}"><button data-st="${k}:-1" aria-label="Diminuir">−</button><input data-k="${k}" inputmode="decimal" aria-label="${lbl||d.l}"><span class="u">${d.u==="pt"?"":d.u}</span><button data-st="${k}:1" aria-label="Aumentar">+</button></span>`};
@@ -906,7 +953,7 @@ function renderCtx(){const el=$("ctx"),b=S.sel.b,gd=GD();if(!b){el.innerHTML=`<s
  else{if(blk.f)parts.push(fontSel(blk.f));if(blk.sz)parts.push(stepper(blk.sz));if(blk.f2)parts.push(`<span class="vr"></span><span class="hintc">Títulos</span>`+fontSel(blk.f2)+stepper(blk.sz2));if(blk.c)parts.push(colBtn(blk.c));if(blk.c2)parts.push(colBtn(blk.c2));
   if(blk.sp)parts.push(`<button class="cb" data-pop="sp" title="Espaçamento">${IC.sp}</button>`);if(blk.o)parts.push(`<button class="cb" data-pop="op" title="Transparência">${IC.op}</button>`);if(blk.r)parts.push(stepper(blk.r,"Girar"));
   if(blk.img)parts.push(`<button class="cb" data-act="img" title="Trocar imagem">${IC.img}</button><button class="cb" data-act="hide" title="Ocultar">${IC.eye}</button>`);
-  if(blk.align)parts.push(`<button class="cb" data-act="align" title="Alinhamento">${curP().envAlign==="center"?"Centralizado":"À esquerda"}</button>`);if((b+"DX")in G().p)parts.push(`<button class="cb" data-act="center" title="Centralizar">${IC.ctr}</button>`)}
+  if(blk.align)parts.push(`<button class="cb" data-act="align" title="Alinhamento">${curP()[blk.align]==="center"?"Centralizado":"À esquerda"}</button>`);if((blk.dx||b+"DX")in G().p)parts.push(`<button class="cb" data-act="center" title="Centralizar">${IC.ctr}</button>`)}
  parts.push(`<span class="vr"></span><span class="seg" style="flex:none"><button data-sc="all" aria-pressed="${S.scope==="all"}">Todos</button><button data-sc="one" aria-pressed="${S.scope==="one"}" ${it?"":"disabled"}>Só ${it?esc(it.nome.split(" ")[0]):"este"}</button></span>`);
  parts.push(`<button class="cb" data-act="reset" title="Redefinir">${IC.rs}</button>`);
  el.innerHTML=parts.join("");const fl=$("ctxFlag");if(fl){fl.value=S.c.flag.code;fl.onchange=e=>{S.c.flag.code=e.target.value;$("flagCode").value=e.target.value;flagPv();save();render()}}syncCtx()}
@@ -919,13 +966,13 @@ $("ctx").addEventListener("click",e=>{const st=e.target.closest("[data-st]");if(
  const pp=e.target.closest("[data-pop]");if(pp){togglePop(pp);return}
  const a=e.target.closest("[data-act]");if(!a)return;const act=a.dataset.act,b=S.sel.b,blk=BL()[b]||{};
  if(act==="reset"){snap();resetBlock(b);save();renderCtx();render()}
- else if(act==="center"){snap();setp(b+"DX",0);save();render()}
- else if(act==="align"){snap();setp("envAlign",curP().envAlign==="center"?"left":"center");save();renderCtx();render()}
+ else if(act==="center"){snap();setp(blk.dx||b+"DX",0);save();render()}
+ else if(act==="align"){snap();setp(blk.align,curP()[blk.align]==="center"?"left":"center");save();renderCtx();render()}
  else if(act==="hide"&&blk.img){hideEmb(blk.img);select(null,null);save();render()}
  else if(act==="img"&&blk.img)pickEmb(blk.img)});
 $("ctx").addEventListener("change",e=>{const i=e.target;if(i.dataset.k){snap();setp(i.dataset.k,+String(i.value).replace(",","."));save();syncCtx();render()}else if(i.dataset.fk){snap();setp(i.dataset.fk,i.value);save();render()}});
 $("ctx").addEventListener("keydown",e=>{if(e.key==="Enter"&&e.target.dataset.k)e.target.blur()});
-function blockKeys(b){const blk=BL()[b]||{},P=G().p,ks=new Set();for(const f of["sz","sz2","r","f","f2","c","c2","o","align"])if(blk[f])ks.add(blk[f]);(blk.sp||[]).forEach(k=>ks.add(k));if(blk.flag)["flagW","flagH","flagOp","flagFade"].forEach(k=>ks.add(k));for(const k of[b+"DX",b+"DY"])if(k in P)ks.add(k);if(b==="card")["textDX","textDY"].forEach(k=>k in P&&ks.add(k));return[...ks]}
+function blockKeys(b){const blk=BL()[b]||{},P=G().p,ks=new Set();for(const f of["sz","sz2","r","f","f2","c","c2","o","align"])if(blk[f])ks.add(blk[f]);(blk.sp||[]).forEach(k=>ks.add(k));if(blk.flag)["flagW","flagH","flagOp","flagFade"].forEach(k=>ks.add(k));for(const k of[blk.dx||b+"DX",blk.dy||b+"DY"])if(k in P)ks.add(k);if(b==="card")["textDX","textDY"].forEach(k=>k in P&&ks.add(k));return[...ks]}
 function resetBlock(b){const g=G(),ks=blockKeys(b),def={...GEN[S.tab].def};for(const e of S.c.extra||[])Object.assign(def,{[e.id+"DX"]:0,[e.id+"DY"]:0,[e.id+"H"]:extraDef(S.tab),[e.id+"R"]:0,[e.id+"O"]:100});if(S.tab==="etiquetas")scaleLabel(def,Math.min(2.2,Math.max(.6,g.p.faceH/2.54)));if(S.scope==="one"&&S.sel.item){const o=g.ov[S.sel.item];if(o){ks.forEach(k=>delete o[k]);if(!Object.keys(o).length)delete g.ov[S.sel.item]}}else ks.forEach(k=>{if(!SHEETK.has(k))g.p[k]=def[k]})}
 /* popovers */
 let popFor=null;
@@ -962,7 +1009,7 @@ document.querySelectorAll("[data-close]").forEach(b=>b.onclick=()=>{S.panel=null
 function readList(){people=$("list").value.split("\n").map(parse).filter(Boolean)}
 function renderPpl(){$("ppl").innerHTML=people.map(p=>`<li data-k="${esc(key(p))}" class="${p.posto?"":"warn"}"><span><small>${esc(p.posto||"sem posto reconhecido")}</small><b>${esc(p.nome)}</b></span>${p.qty>1?`<span class="q">×${p.qty}</span>`:""}</li>`).join("");pplMark()}
 function pplMark(){document.querySelectorAll("#ppl li").forEach(li=>li.classList.toggle("on",li.dataset.k===S.sel.item))}
-$("ppl").addEventListener("click",e=>{const li=e.target.closest("li");if(!li)return;select(S.tab==="cardapio"?"pessoa":envMode()?"env":"nome",li.dataset.k);const s=findSel();if(s)PG[s.pi].wrap.scrollIntoView({block:"center",behavior:"smooth"})});
+$("ppl").addEventListener("click",e=>{const li=e.target.closest("li");if(!li)return;select(S.tab==="cardapio"?"pessoa":"nome",li.dataset.k);const s=findSel();if(s)PG[s.pi].wrap.scrollIntoView({block:"center",behavior:"smooth"})});
 $("list").addEventListener("input",()=>{readList();renderPpl();save();schedule()});
 $("sample").onclick=()=>{$("list").value=SAMPLE;readList();renderPpl();save();render()};$("clear").onclick=()=>{$("list").value="";readList();renderPpl();save();render();$("list").focus()};
 function renderThemes(){const keep=S.c.theme,fl=S.c.flag.on,tab=S.tab,p=people[0]||{posto:"Vice-Almirante",nome:"Barroso"};S.c.flag.on=false;S.tab="prismas";const sv=ART.prismas;ART.prismas=null;
@@ -1005,28 +1052,68 @@ document.querySelectorAll("[data-f]").forEach(b=>b.onclick=()=>$(b.dataset.f).cl
 for(const side of["L","R"])$("file"+side).onchange=e=>{const f=e.target.files[0];if(!f)return;const r=new FileReader();r.onload=async()=>{store.set("img"+side,r.result);await setImg(side,r.result);S.c["show"+side]=true;$("show"+side).checked=true;renderThemes();render()};r.readAsDataURL(f);e.target.value=""};
 document.querySelectorAll("[data-r]").forEach(b=>b.onclick=async()=>{const side=b.dataset.r;store.del("img"+side);await setImg(side,side==="L"?ANCORA:BRASAO);renderThemes();render()});
 async function setImg(side,src){imgs[side]=await loadImg(src);$("img"+side).src=src}
-function hideEmb(id){if(id==="L"||id==="R"){S.c["show"+id]=false;$("show"+id).checked=false}else{const e=S.c.extra.find(x=>x.id===id);if(e)e.show=false;renderExtras()}}
+function hideEmb(id){if(envMode()){visT()[id]=false;renderVis();return}if(id==="L"||id==="R"){S.c["show"+id]=false;$("show"+id).checked=false}else{const e=S.c.extra.find(x=>x.id===id);if(e)e.show=false;renderExtras()}}
 let swapId=null;function pickEmb(id){if(id==="L"||id==="R")$("file"+id).click();else{swapId=id;$("swapFile").click()}}
 function renderExtras(){$("extras").innerHTML=(S.c.extra||[]).map(e=>`<div class="thumb" data-e="${e.id}"><img src="${imgs[e.id]?imgs[e.id].src:""}" alt=""><div><label class="tg" style="padding:0 0 6px"><span style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${esc(e.name)}</span><input type="checkbox" data-eshow ${e.show?"checked":""}></label><div class="row"><button class="btn" data-eswap>Trocar</button><button class="lnk" data-edel style="color:#b3261e">Remover</button></div></div></div>`).join("")}
 $("addEmb").onclick=()=>$("addFile").click();
-$("addFile").onchange=async e=>{const fs=[...e.target.files];e.target.value="";let last=null;for(const f of fs){const url=await new Promise(r=>{const fr=new FileReader();fr.onload=()=>r(fr.result);fr.readAsDataURL(f)});const id="e"+Date.now().toString(36)+Math.random().toString(36).slice(2,5);imgs[id]=await loadImg(url);if(!imgs[id])continue;store.set("emb."+id,url);S.c.extra.push({id,name:f.name.replace(/\.[^.]+$/,"").slice(0,30)||"Emblema",show:true});registerExtra(id);last=id}save();renderExtras();render();if(last){select(last,null);toast("Emblema adicionado. Arraste na folha para posicionar.")}};
+$("addFile").onchange=async e=>{const fs=[...e.target.files];e.target.value="";let last=null;for(const f of fs){const url=await new Promise(r=>{const fr=new FileReader();fr.onload=()=>r(fr.result);fr.readAsDataURL(f)});const id="e"+Date.now().toString(36)+Math.random().toString(36).slice(2,5);imgs[id]=await loadImg(url);if(!imgs[id])continue;store.set("emb."+id,url);S.c.extra.push({id,name:f.name.replace(/\.[^.]+$/,"").slice(0,30)||"Emblema",show:true});registerExtra(id);if(envMode())visT()[id]=true;last=id}save();renderExtras();renderVis();render();if(last){select(last,null);toast("Emblema adicionado. Arraste na folha para posicionar.")}};
 $("swapFile").onchange=e=>{const f=e.target.files[0];e.target.value="";if(!f||!swapId)return;const fr=new FileReader();fr.onload=async()=>{store.set("emb."+swapId,fr.result);imgs[swapId]=await loadImg(fr.result);renderExtras();render()};fr.readAsDataURL(f)};
 $("extras").addEventListener("change",e=>{const el=e.target.closest("[data-e]");if(!el||!e.target.matches("[data-eshow]"))return;const x=S.c.extra.find(v=>v.id===el.dataset.e);x.show=e.target.checked;save();render()});
-$("extras").addEventListener("click",e=>{const el=e.target.closest("[data-e]");if(!el)return;const id=el.dataset.e;if(e.target.closest("[data-eswap]"))pickEmb(id);else if(e.target.closest("[data-edel]")){S.c.extra=S.c.extra.filter(v=>v.id!==id);store.del("emb."+id);delete imgs[id];if(S.sel.b===id)select(null,null);save();renderExtras();render()}});
-const ENV_HINT={cargo:"Uma pessoa por bloco, separadas por uma linha em branco. 1ª linha: posto e nome; linhas seguintes: cargo (quantas quiser). Para mudar o tratamento de alguém, comece o bloco com ele (ex.: “À Senhora”). Também aceita colar do Excel: uma pessoa por linha, colunas Nome | Cargo.",end:"Uma pessoa por bloco, separadas por uma linha em branco. 1ª linha: nome (com o posto, se quiser); linhas seguintes: endereço, bairro/cidade e CEP. Também aceita colar do Excel: uma pessoa por linha, colunas Nome | Endereço | Cidade | CEP."};
-const ENV_PH={cargo:"Almirante de Esquadra Fulano de Tal\nComandante de Operações Navais\n\nVA Barroso\nDiretor-Geral do Pessoal da Marinha",end:"VA Barroso\nRua Exemplo, 123 – Apto 401\nCopacabana – Rio de Janeiro/RJ\nCEP 22000-000"};
-function readEnv(){envRecs=parseEnv(S.env.text);$("envPpl").innerHTML=envRecs.map(p=>`<li><span><small>${esc((p.trat!=null?p.trat:S.env.trat)+(p.posto?" · "+p.posto:""))}</small><b>${esc(p.nome)}</b><small>${esc((p.rest||[]).join(" · ")||"—")}</small></span>${p.qty>1?`<span class="q">×${p.qty}</span>`:""}</li>`).join("")}
+$("extras").addEventListener("click",e=>{const el=e.target.closest("[data-e]");if(!el)return;const id=el.dataset.e;if(e.target.closest("[data-eswap]"))pickEmb(id);else if(e.target.closest("[data-edel]")){S.c.extra=S.c.extra.filter(v=>v.id!==id);store.del("emb."+id);delete imgs[id];if(S.sel.b===id)select(null,null);save();renderExtras();renderVis();render()}});
+const TRATS=["Ao Senhor","À Senhora","A Sua Excelência o Senhor","A Sua Excelência a Senhora","Ao Excelentíssimo Senhor","À Excelentíssima Senhora","Ao Ilustríssimo Senhor","À Ilustríssima Senhora",""];
+document.querySelectorAll(".tratSel").forEach(sl=>sl.innerHTML=TRATS.map(t=>`<option value="${t}">${t||"Sem tratamento"}</option>`).join(""));
+const RANKS_BY={Marinha:["Almirante","Almirante de Esquadra","Vice-Almirante","Contra-Almirante","Capitão de Mar e Guerra","Capitão de Fragata","Capitão de Corveta","Capitão-Tenente","Primeiro-Tenente","Segundo-Tenente","Guarda-Marinha","Suboficial","Primeiro-Sargento","Segundo-Sargento","Terceiro-Sargento","Cabo","Marinheiro"],"Exército":["Marechal","General de Exército","General de Divisão","General de Brigada","Coronel","Tenente-Coronel","Major","Capitão","Primeiro-Tenente","Segundo-Tenente","Aspirante a Oficial","Subtenente","Primeiro-Sargento","Segundo-Sargento","Terceiro-Sargento","Cabo","Soldado"],"Aeronáutica":["Marechal do Ar","Tenente-Brigadeiro do Ar","Major-Brigadeiro do Ar","Brigadeiro do Ar","Coronel","Tenente-Coronel","Major","Capitão","Primeiro-Tenente","Segundo-Tenente","Aspirante a Oficial","Suboficial","Primeiro-Sargento","Segundo-Sargento","Terceiro-Sargento","Cabo","Soldado"]};
+function fillPosto(sel,forca,val){const list=RANKS_BY[forca]||RANKS_BY.Marinha,extra=val&&!list.includes(val)?[val]:[];sel.innerHTML=`<option value="">—</option>`+list.concat(extra).map(r=>`<option>${esc(r)}</option>`).join("");sel.value=val||""}
+const visT=()=>{const g=S.g.etiquetas;g.vis=g.vis||{};return g.vis[S.env.type]||(g.vis[S.env.type]={})};
+/* banco de autoridades */
+let DB=[];try{DB=JSON.parse(store.get("db")||"[]")}catch(e){DB=[]}if(!Array.isArray(DB))DB=[];
+const saveDB=()=>store.set("db",JSON.stringify(DB));
+const F=()=>S.env.form;let editMil=-1;
+function dbOptions(){const f=F(),list=DB.filter(r=>r.forca===f.forca&&(!f.posto||r.posto===f.posto));$("dbNames").innerHTML=list.map(r=>`<option value="${esc(r.nome)}">${esc([r.posto,r.comp,r.cargo].filter(Boolean).join(" · "))}</option>`).join("");$("dbCargos").innerHTML=[...new Set(DB.map(r=>r.cargo).filter(Boolean))].sort().map(c=>`<option value="${esc(c)}">`).join("");
+ $("dbHint").textContent=DB.length?`${list.length} autoridade${list.length===1?"":"s"} no banco para ${f.forca}${f.posto?" · "+f.posto:""}.`:"O banco de autoridades está vazio: cadastre em Config. (engrenagem) ou digite à mão."}
+function formUI(){const f=F();$("fTrat").value=f.trat;$("fForca").value=f.forca;fillPosto($("fPosto"),f.forca,f.posto);$("fComp").value=f.comp;$("fNome").value=f.nome;$("fCargo").value=f.cargo;$("fEnd").value=f.end;$("fQty").value=f.qty||1;$("fAdd").textContent=editMil>=0?"Salvar":"Adicionar";$("fCancel").hidden=editMil<0;dbOptions()}
+const bindF=(id,k,ev="input")=>$(id).addEventListener(ev,e=>{F()[k]=k==="qty"?Math.max(1,Math.min(50,+e.target.value||1)):e.target.value;if(k==="posto")dbOptions();save()});
+bindF("fTrat","trat","change");bindF("fPosto","posto","change");bindF("fComp","comp");bindF("fCargo","cargo");bindF("fEnd","end");bindF("fQty","qty");
+$("fForca").onchange=e=>{const f=F();f.forca=e.target.value;f.posto="";fillPosto($("fPosto"),f.forca,"");dbOptions();save()};
+$("fNome").addEventListener("input",e=>{const f=F(),v=e.target.value;f.nome=v;const n=norm(v.trim()),m=n&&(DB.find(r=>norm(r.nome)===n&&r.forca===f.forca)||DB.find(r=>norm(r.nome)===n));if(m){f.forca=m.forca;f.posto=m.posto||"";f.comp=m.comp||"";f.cargo=m.cargo||"";f.end=m.end||"";$("fForca").value=f.forca;fillPosto($("fPosto"),f.forca,f.posto);$("fComp").value=f.comp;$("fCargo").value=f.cargo;$("fEnd").value=f.end;dbOptions()}save()});
+$("fAdd").onclick=()=>{const f=F();if(!f.nome.trim()){toast("Escreva ou escolha o nome da autoridade.");$("fNome").focus();return}const rec={trat:f.trat,forca:f.forca,posto:f.posto,comp:f.comp.trim(),nome:f.nome.trim(),cargo:f.cargo.trim(),end:f.end.trim(),qty:f.qty||1};
+ if(editMil>=0){rec.k=S.env.mil[editMil].k;S.env.mil[editMil]=rec;editMil=-1}else{rec.k="m"+Date.now().toString(36)+Math.random().toString(36).slice(2,5);S.env.mil.push(rec)}
+ Object.assign(f,{posto:"",comp:"",nome:"",cargo:"",end:"",qty:1});formUI();renderMil();save();render();$("fNome").focus()};
+$("fCancel").onclick=()=>{editMil=-1;Object.assign(F(),{posto:"",comp:"",nome:"",cargo:"",end:"",qty:1});formUI()};
+$("fReset").onclick=$("fCancel").onclick;
+function renderMil(){const L=S.env.mil;$("milCount").textContent=`Etiquetas (${L.reduce((a,r)=>a+(r.qty||1),0)})`;$("milList").innerHTML=L.length?L.map((r,i)=>`<li data-i="${i}" class="${i===editMil?"on":""}"><span><small>${esc([r.trat,[r.posto,r.comp].filter(Boolean).join(" ")].filter(Boolean).join(" · ")||"—")}</small><b>${esc(r.nome)}</b><small>${esc(r.cargo||"")}${r.end?" · "+esc(r.end.split("\n")[0]):""}</small></span><span class="q">${r.qty>1?"×"+r.qty+" ":""}<button class="x" data-del="${i}" aria-label="Remover" style="width:26px;height:26px;font-size:17px">×</button></span></li>`).join(""):`<li style="cursor:default;color:var(--mute)">Nenhuma etiqueta ainda. Preencha acima e clique em Adicionar.</li>`}
+$("milList").addEventListener("click",e=>{const d=e.target.closest("[data-del]");if(d){S.env.mil.splice(+d.dataset.del,1);editMil=-1;renderMil();formUI();save();render();return}const li=e.target.closest("li[data-i]");if(!li)return;editMil=+li.dataset.i;const r=S.env.mil[editMil];Object.assign(F(),{trat:r.trat,forca:r.forca,posto:r.posto,comp:r.comp||"",nome:r.nome,cargo:r.cargo||"",end:r.end||"",qty:r.qty||1});formUI();renderMil();select("env",r.k)});
 $("envType").onchange=e=>{S.env.type=e.target.value;S.sel={b:null,item:null};save();syncPanels();renderCtx();render()};
-$("envTrat").onchange=e=>{S.env.trat=e.target.value;readEnv();save();render()};
-$("envText").addEventListener("input",e=>{S.env.text=e.target.value;readEnv();save();schedule()});
-$("remText").addEventListener("input",e=>{S.env.rem=e.target.value;save();schedule()});
-$("remCopies").oninput=e=>{S.env.copies=Math.max(1,Math.min(500,+e.target.value||1));save();schedule()};
-$("envLogo").onchange=e=>{G().envLogo=e.target.checked;save();renderCtx();render()};
-$("envFromList").onclick=()=>{const add=people.map(p=>(p.posto?p.posto+" ":"")+p.nome+(p.qty>1?" x"+p.qty:"")+"\n").join("\n");S.env.text=(S.env.text.trim()?S.env.text.trim()+"\n\n":"")+add;$("envText").value=S.env.text;readEnv();save();render();toast("Nomes copiados. Acrescente o cargo ou endereço embaixo de cada um.")};
-$("envClear").onclick=()=>{S.env.text="";$("envText").value="";readEnv();save();render()};
+$("eTrat").onchange=e=>{S.env.esp.trat=e.target.value;save();render()};$("espName").oninput=e=>{S.env.esp.nome=e.target.value;save();schedule()};$("espCopies").oninput=e=>{S.env.esp.copies=Math.max(1,Math.min(500,+e.target.value||1));save();schedule()};
+$("dTrat").onchange=e=>{S.env.espd.trat=e.target.value;save();render()};$("espList").addEventListener("input",e=>{S.env.espd.list=e.target.value;save();schedule()});
+$("remText").addEventListener("input",e=>{S.env.rem=e.target.value;save();schedule()});$("remCopies").oninput=e=>{S.env.copies=Math.max(1,Math.min(500,+e.target.value||1));save();schedule()};
+function renderVis(){const v=visT(),all=[["L","Emblema 1",imgs.L],["R","Emblema 2",imgs.R],...(S.c.extra||[]).map(e=>[e.id,e.name,imgs[e.id]])];$("visList").innerHTML=all.map(([id,n,im])=>`<label class="tg" style="padding:5px 0"><span style="display:flex;align-items:center;gap:10px;min-width:0"><img src="${im?im.src:""}" alt="" style="width:30px;height:30px;object-fit:contain;background:var(--hov);border-radius:6px;padding:2px;flex:none"><span style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${esc(n)}</span></span><input type="checkbox" data-vis="${id}" ${v[id]?"checked":""}></label>`).join("")}
+$("visList").addEventListener("change",e=>{const id=e.target.dataset.vis;if(!id)return;visT()[id]=e.target.checked;save();render();if(e.target.checked)setTimeout(()=>select(id,null),50)});
+$("addFig").onclick=()=>$("addFile").click();
+/* configuração */
+let editDB=-1;
+function renderDB(){const q=norm($("dbSearch").value.trim()),L=DB.map((r,i)=>[r,i]).filter(([r])=>!q||norm([r.nome,r.posto,r.cargo,r.forca].join(" ")).includes(q));$("dbTitle").textContent=`Banco de autoridades (${DB.length})`;
+ $("dbList").innerHTML=L.length?L.slice(0,300).map(([r,i])=>`<li data-i="${i}"><span><small>${esc([r.posto,r.comp].filter(Boolean).join(" ")||"—")} · ${esc(r.forca)}${r.sit&&r.sit!=="Ativa"?" · "+esc(r.sit):""}</small><b>${esc(r.nome)}</b><small>${esc(r.cargo||"")}</small></span></li>`).join(""):`<li style="cursor:default;color:var(--mute)">${DB.length?"Nada encontrado.":"Vazio. Cadastre abaixo ou importe do Excel."}</li>`;dbOptions()}
+function dbFormUI(r){$("dForca").value=r.forca||"Marinha";fillPosto($("dPosto"),$("dForca").value,r.posto||"");$("dComp").value=r.comp||"";$("dNome").value=r.nome||"";$("dCargo").value=r.cargo||"";$("dEnd").value=r.end||"";$("dSit").value=r.sit||"Ativa";$("dDel").hidden=editDB<0;$("dbFormT").textContent=editDB>=0?"Editar autoridade":"+ Nova autoridade"}
+$("dForca").onchange=e=>fillPosto($("dPosto"),e.target.value,"");
+$("dbSearch").oninput=renderDB;
+$("dbList").addEventListener("click",e=>{const li=e.target.closest("li[data-i]");if(!li)return;editDB=+li.dataset.i;dbFormUI(DB[editDB]);$("dbForm").open=true;$("dNome").focus()});
+$("dSave").onclick=()=>{const r={forca:$("dForca").value,posto:$("dPosto").value,comp:$("dComp").value.trim(),nome:$("dNome").value.trim(),cargo:$("dCargo").value.trim(),end:$("dEnd").value.trim(),sit:$("dSit").value};if(!r.nome){toast("Escreva o nome.");return}if(editDB>=0)DB[editDB]=r;else DB.push(r);editDB=-1;saveDB();dbFormUI({});renderDB();toast("Autoridade salva.")};
+$("dCancel").onclick=()=>{editDB=-1;dbFormUI({});$("dbForm").open=false};
+let delArm=false;$("dDel").onclick=()=>{if(editDB<0)return;if(!delArm){delArm=true;$("dDel").textContent="Clique de novo para excluir";setTimeout(()=>{delArm=false;$("dDel").textContent="Excluir"},3000);return}DB.splice(editDB,1);editDB=-1;delArm=false;$("dDel").textContent="Excluir";saveDB();dbFormUI({});renderDB()};
+let wipeArm=false;$("dbWipe").onclick=()=>{if(!wipeArm){wipeArm=true;$("dbWipe").textContent="Clique de novo para apagar tudo";setTimeout(()=>{wipeArm=false;$("dbWipe").textContent="Apagar todo o banco"},3000);return}DB=[];saveDB();wipeArm=false;$("dbWipe").textContent="Apagar todo o banco";renderDB();toast("Banco apagado.")};
+function importRows(txt){const lines=txt.split(/\r?\n/).map(l=>l.trim()).filter(Boolean);if(!lines.length)return 0;const sep=lines[0].includes("\t")?"\t":(lines[0].split(";").length>=lines[0].split(",").length?";":",");let n=0;
+ for(const l of lines){const c=l.split(sep).map(x=>x.trim().replace(/^"|"$/g,"").replace(/""/g,'"'));if(/^for[cç]a$/i.test(c[0]))continue;const fz=/ex[eé]rc/i.test(c[0])?"Exército":/aero/i.test(c[0])?"Aeronáutica":"Marinha";const r={forca:fz,posto:c[1]||"",comp:c[2]||"",nome:c[3]||"",cargo:c[4]||"",end:(c[5]||"").replace(/ \/ /g,"\n"),sit:c[6]||"Ativa"};if(!r.nome)continue;const ex=DB.findIndex(x=>norm(x.nome)===norm(r.nome)&&x.forca===r.forca);if(ex>=0)DB[ex]=r;else DB.push(r);n++}saveDB();renderDB();return n}
+$("dbImport").onclick=()=>{const n=importRows($("dbPaste").value);toast(n?`${n} autoridade${n>1?"s":""} importada${n>1?"s":""}.`:"Nada para importar: confira a ordem das colunas.");if(n)$("dbPaste").value=""};
+$("dbFileBtn").onclick=()=>$("dbFile").click();$("dbFile").onchange=e=>{const f=e.target.files[0];e.target.value="";if(!f)return;const fr=new FileReader();fr.onload=()=>{const n=importRows(String(fr.result));toast(`${n} autoridade${n===1?"":"s"} importada${n===1?"":"s"}.`)};fr.readAsText(f)};
+const csvCell=v=>{v=String(v||"").replace(/\n/g," / ");return/[;"\n]/.test(v)?`"${v.replace(/"/g,'""')}"`:v};
+$("dbExport").onclick=async()=>{const rows=[["Força","Posto","Complemento","Nome","Cargo","Endereço","Situação"],...DB.map(r=>[r.forca,r.posto,r.comp,r.nome,r.cargo,r.end,r.sit])],csv="﻿"+rows.map(r=>r.map(csvCell).join(";")).join("\r\n"),name="banco-autoridades.csv";
+ try{if(dl){await dl.save({filename:name,data:csv});toast("Planilha salva.")}else if(window.self===window.top){const a=document.createElement("a");a.href=URL.createObjectURL(new Blob([csv],{type:"text/csv"}));a.download=name;a.click();toast("Planilha salva.")}else toast("Esta visualização não permite baixar: use Copiar para o Excel.")}catch(e){toast(e&&e.code==="declined"?"Download cancelado.":"Não foi possível salvar.")}};
+$("dbCopy").onclick=async()=>{const t=[["Força","Posto","Complemento","Nome","Cargo","Endereço","Situação"],...DB.map(r=>[r.forca,r.posto,r.comp,r.nome,r.cargo,(r.end||"").replace(/\n/g," / "),r.sit])].map(r=>r.join("\t")).join("\n");try{await navigator.clipboard.writeText(t);toast("Copiado. Cole no Excel.")}catch(e){toast("Não foi possível copiar aqui.")}};
+
 function syncPanels(){const t=S.tab,g=G(),P=g.p;document.querySelectorAll(".rail [data-p]").forEach(b=>{b.hidden=b.dataset.only&&b.dataset.only!==t;b.setAttribute("aria-pressed",S.panel===b.dataset.p)});
  if(S.panel==="menu"&&t!=="cardapio")S.panel="nomes";$("panel").hidden=!S.panel;document.querySelectorAll("[data-panel]").forEach(s=>s.hidden=s.dataset.panel!==S.panel);
- $("mCopiesBox").hidden=M.per;const et=t==="etiquetas";$("envBox").hidden=!et;$("nameBox").hidden=et&&S.env.type!=="nome";$("envDest").hidden=!(S.env.type==="cargo"||S.env.type==="end");$("envRem").hidden=S.env.type!=="rem";$("envLogoRow").hidden=S.env.type==="nome";$("envType").value=S.env.type;$("envTrat").value=S.env.trat;$("envLogo").checked=!!g.envLogo;$("envHint").textContent=ENV_HINT[S.env.type]||"";$("envText").placeholder=ENV_PH[S.env.type]||"";$("nomesTitle").textContent=et?"Etiquetas":"Nomes";document.querySelector('.rail [data-p=nomes]').lastChild.textContent=et?"Etiquetas":"Nomes";$("paperTent").hidden=t==="etiquetas";$("paperLabel").hidden=t!=="etiquetas";
+ $("mCopiesBox").hidden=M.per;const et=t==="etiquetas",ty=S.env.type;$("envBox").hidden=!et;$("nameBox").hidden=et;$("secMil").hidden=ty!=="mil";$("secEsp").hidden=ty!=="esp";$("secEspd").hidden=ty!=="espd";$("secRem").hidden=ty!=="rem";$("envType").value=ty;if(et){renderVis();renderMil()}$("nomesTitle").textContent=et?"Etiquetas":"Nomes";document.querySelector('.rail [data-p=nomes]').lastChild.textContent=et?"Etiquetas":"Nomes";if(S.panel==="config")renderDB();$("paperTent").hidden=t==="etiquetas";$("paperLabel").hidden=t!=="etiquetas";
  if(t==="etiquetas"){const m=MODELS[g.model]||MODELS[0];$("brand").value=m.b;fillModels(m.b);$("model").value=m.id;const L=layout();$("modelInfo").textContent=`${br(P.faceW*10,1)} × ${br(P.faceH*10,1)} mm · ${L.cols} × ${L.rows} = ${L.per} por folha · papel ${PAPERS[g.paper].n}`;
   $("modelNote").textContent=m.b==="Personalizado"?"Ajuste largura e altura clicando na etiqueta (quadro inteiro) ou mude o modelo.":m.est?"Margens estimadas (grade centralizada): confira com o teste de alinhamento.":m.b==="Colacril"||m.b==="Maxprint"?"Mesma grade da referência Pimaco equivalente. Confira com o teste de alinhamento na primeira vez.":m.b==="Avery"||m.b==="Folha comum"?"Grade padrão do modelo. Confira com o teste de alinhamento.":"Medidas e margens da tabela de referências do fabricante. Confira com o teste na primeira vez.";
   $("skip").value=g.skip;$("offX").value=g.offX;$("offY").value=g.offY}
@@ -1047,11 +1134,11 @@ $("area").addEventListener("pointerdown",e=>{if(e.target===$("area")||e.target==
 new ResizeObserver(()=>schedule()).observe($("area"));
 (async()=>{
  $("hdrlogo").src=ANCORA;for(const t in GEN)S.g[t]=freshGen(t);
- try{const o=JSON.parse(store.get("state")||"null");if(o){Object.assign(S.c,o.c||{});S.c.flag={on:false,code:"it",swap:false,only:false,...(o.c&&o.c.flag)};S.c.extra=Array.isArray(o.c&&o.c.extra)?o.c.extra:[];for(const t in GEN)if(o.g&&o.g[t])S.g[t]={...S.g[t],...o.g[t],p:{...GEN[t].def,...o.g[t].p}};Object.assign(S.menu,o.menu||{});Object.assign(S.env,o.env||{});if("panel"in o)S.panel=o.panel}}catch(e){}
+ try{const o=JSON.parse(store.get("state")||"null");if(o){Object.assign(S.c,o.c||{});S.c.flag={on:false,code:"it",swap:false,only:false,...(o.c&&o.c.flag)};S.c.extra=Array.isArray(o.c&&o.c.extra)?o.c.extra:[];for(const t in GEN)if(o.g&&o.g[t])S.g[t]={...S.g[t],...o.g[t],p:{...GEN[t].def,...o.g[t].p}};Object.assign(S.menu,o.menu||{});{const d=S.env,e=o.env||{};S.env={...d,...e,form:{...d.form,...(e.form||{})},esp:{...d.esp,...(e.esp||{})},espd:{...d.espd,...(e.espd||{})},mil:Array.isArray(e.mil)?e.mil:[]};if(!["mil","esp","espd","rem"].includes(S.env.type))S.env.type="mil";const ge=S.g.etiquetas;if(!ge.vis)ge.vis={mil:{L:true},esp:{},espd:{},rem:{L:true}}}if("panel"in o)S.panel=o.panel}}catch(e){}
  if(!THEMES[S.c.theme])S.c.theme="gala";
  $("evt").value=S.c.evt||"";$("caps").checked=S.c.caps;$("showL").checked=S.c.showL;$("showR").checked=S.c.showR;
  $("flagOn").checked=S.c.flag.on;$("flagCode").value=S.c.flag.code;$("flagSwap").checked=S.c.flag.swap;$("flagBr").checked=S.c.flag.only;flagPv();
- $("envText").value=S.env.text;$("remText").value=S.env.rem;$("remCopies").value=S.env.copies;readEnv();$("mTitle").value=M.title;$("mTitleB").value=M.titleB;$("mFront").value=M.front;$("mBack").value=M.back;$("mPer").checked=M.per;$("mCopies").value=M.copies;
+ $("remText").value=S.env.rem;$("remCopies").value=S.env.copies;$("eTrat").value=S.env.esp.trat;$("espName").value=S.env.esp.nome;$("espCopies").value=S.env.esp.copies;$("dTrat").value=S.env.espd.trat;$("espList").value=S.env.espd.list;formUI();renderDB();$("mTitle").value=M.title;$("mTitleB").value=M.titleB;$("mFront").value=M.front;$("mBack").value=M.back;$("mPer").checked=M.per;$("mCopies").value=M.copies;
  const sv=store.get("list");$("list").value=sv!==null?sv:SAMPLE;readList();renderPpl();
  await Promise.all([setImg("L",store.get("imgL")||ANCORA),setImg("R",store.get("imgR")||BRASAO),...Object.keys(GEN).map(async t=>{ART[t]=await loadImg(store.get("art."+t))}),...["700 20px Cinzel","600 20px Cormorant","italic 600 20px Cormorant","600 20px Montserrat","700 20px Playfair",'400 20px "Great Vibes"'].map(f=>document.fonts.load(f))]);
  await Promise.all(S.c.extra.map(async e=>{imgs[e.id]=await loadImg(store.get("emb."+e.id))}));S.c.extra=S.c.extra.filter(e=>imgs[e.id]);S.c.extra.forEach(e=>registerExtra(e.id));renderExtras();flagImg("br");flagImg(S.c.flag.code);renderThemes();setTab(location.hash.slice(1)||"prismas");
